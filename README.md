@@ -51,6 +51,7 @@ heritage-short/
 │   ├── cache.py
 │   ├── config.py
 │   ├── orchestrator.py
+│   ├── provider_runner.py
 │   ├── providers.py
 │   ├── retry.py
 │   ├── runlog.py
@@ -60,6 +61,7 @@ heritage-short/
 └── tests/
     ├── test_cache.py
     ├── test_orchestrator.py
+    ├── test_provider_runner.py
     ├── test_retry.py
     ├── test_runlog.py
     ├── test_subtitles.py
@@ -127,6 +129,7 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
 - Validation-gated stage orchestrator (no production stages are registered yet).
 - Provider-neutral text, image, video, music, and narration capability contracts; no concrete provider adapter is implemented.
+- Provider-call runner with bounded retries, output-file checks, prompt-hash logging, and per-attempt run records; no real provider calls have occurred.
 - Draft English SRT generation from storyboard shot durations (not final narration sync).
 - Project documentation, dependency declarations, placeholder environment template, and ethics policy.
 
@@ -135,7 +138,7 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Have an Amharic speaker review narration, subtitles, and pronunciation guidance.
 - Implement concrete provider adapters and script/story and production-stage workflows.
 - Generate and review reference images, keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
-- Integrate cache, retry, failure handling, and `runs.jsonl` logging with actual provider calls.
+- Connect the cache helper and concrete provider adapters to production stages; real provider calls remain pending.
 - Create the narration-only radio cut and conduct both audience tests with at least three people each; neither test has happened yet.
 - Implement FFmpeg assembly and verify subtitles, music ducking, loudness, the end card, and both exports.
 - Continue recording real experiments, failures, and costs in their existing ledgers; create the written report and walkthrough video, and prepare the public post.
