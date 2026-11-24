@@ -33,11 +33,14 @@ pipeline/subtitles.py
 
 pipeline/providers.py
   capability-specific, provider-neutral generation contracts
+
+pipeline/provider_runner.py
+  bounded retries, output checks, and per-attempt run logging
 ```
 
 `storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover the cache, retry, logging, orchestration, and draft subtitle utilities.
 
-The protocols in `pipeline/providers.py` define separate text, image, video, music, and narration capabilities so an adapter can declare only what its service supports. No concrete AI provider adapter exists yet. The cache, retry, logging, orchestration, subtitle, and provider-contract utilities are foundations; there are no generated assets, `runs.jsonl`, or final exports in the repository yet.
+The protocols in `pipeline/providers.py` define separate text, image, video, music, and narration capabilities so an adapter can declare only what its service supports. `pipeline/provider_runner.py` connects an adapter call to bounded retries and `runs.jsonl` logging, verifies that a non-empty output file was created, and records only a prompt hash. No concrete AI provider adapter exists yet, and no real provider call has been made. There are no generated assets, `runs.jsonl`, or final exports in the repository yet.
 
 ## Planned production flow
 
@@ -101,7 +104,7 @@ Cache each generated item independently so an unchanged shot can be reused. A ca
 
 ## Retries and failures (helper implemented; provider integration pending)
 
-`pipeline/retry.py` implements bounded retries for caller-declared transient exception types. Validation errors, missing credentials, permission errors, and other undeclared failures are not retried. Provider wrappers must log every actual attempt. If moving-shot generation is unavailable, the documented fallback is a slow FFmpeg pan/zoom over an approved still; record that fallback honestly. No provider wrapper currently uses the retry helper.
+`pipeline/retry.py` implements bounded retries for caller-declared transient exception types. `pipeline/provider_runner.py` retries rate-limit and timeout errors by default and logs every attempt. Validation errors, missing credentials, permission errors, and other undeclared failures are not retried by default. If moving-shot generation is unavailable, the documented fallback is a slow FFmpeg pan/zoom over an approved still; record that fallback honestly. No real provider call has exercised these helpers.
 
 No provider calls or generation failures have been recorded by the current pipeline because those stages do not exist yet.
 
@@ -132,4 +135,4 @@ The current lightweight checks are:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The current tests use temporary files and fake stages to cover validation-before-generation, deterministic cache keys and invalidation, bounded retry behavior, secret-safe run logs, and draft subtitle timing. Future FFmpeg command tests should avoid requiring media generation or paid model calls. Actual hosted provider smoke tests and media inspection will be recorded separately and run only after service access, terms, and costs are checked.
+The current tests use temporary files and fake stages/providers to cover validation-before-generation, deterministic cache keys and invalidation, per-attempt provider logging, bounded retries, secret-safe run logs, and draft subtitle timing. Future FFmpeg command tests should avoid requiring media generation or paid model calls. Actual hosted provider smoke tests and media inspection will be recorded separately and run only after service access, terms, and costs are checked.
