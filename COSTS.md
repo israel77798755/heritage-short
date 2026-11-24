@@ -12,7 +12,7 @@ The repository does not contain `runs.jsonl` or generated media, and no producti
 |---|---|---:|---|---|---|
 | Script and prompt assistance | Gemini API | None recorded | Not measured | Not measured | Not verified |
 | Amharic narration | Gemini TTS | None recorded | Not measured | Not measured | Not verified |
-| Keyframe images | Cloudflare Workers AI | None recorded | Not measured | Not measured | Not verified |
+| Keyframe images | Gemini image adapter (model access and pricing pending verification) | None recorded | Not measured | Not measured | Not verified |
 | Moving shots | Wan 2.2 on Kaggle/Colab | None recorded | GPU minutes not measured | Not measured | Not verified |
 | Original music | ACE-Step on Kaggle/Colab | None recorded | GPU minutes not measured | Not measured | Not verified |
 | FFmpeg assembly | Local or hosted CPU | Not run | Not measured | Not measured | Not applicable / not measured |
