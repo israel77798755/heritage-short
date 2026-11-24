@@ -13,7 +13,7 @@ from pipeline.providers import ImageGenerationProvider, GenerationRequest
 
 @dataclass(frozen=True)
 class KeyframeReferences:
-    """Approved image references used to keep characters and style consistent."""
+    """Image references used to keep characters and style consistent."""
 
     almaz: Path
     dawit: Path
