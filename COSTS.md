@@ -19,6 +19,10 @@ The repository does not contain `runs.jsonl` or generated media, and no producti
 
 These are candidate stages and providers from the project plan, not completed runs or verified access.
 
+## Public pricing reference (not project usage)
+
+The official [Gemini 3.8 Flash TTS model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash-tts), checked 2026-11-25, lists free-tier text and audio pricing as free of charge. It also lists standard paid pricing of $0.50 per million text input tokens and $9.00 per million audio output tokens through 2026-12-31, equivalent to $0.00225 per 10 seconds of generated audio. The listed rates change on 2027-01-01. This is a public reference only: no API request or charge has occurred, actual account quota is unverified, Amharic support is unverified, and paid use is not authorized.
+
 ## How to record a future run
 
 For each real run, record:
