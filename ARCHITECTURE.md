@@ -15,11 +15,26 @@ tests/test_validate_storyboard.py
 
 pipeline/config.py
   project paths, .env loading, and safe environment-variable access
+
+pipeline/cache.py
+  content fingerprints and deterministic cache paths
+
+pipeline/retry.py
+  bounded retries for explicitly classified transient errors
+
+pipeline/runlog.py
+  JSONL model-call records with sensitive-field redaction
+
+pipeline/orchestrator.py
+  storyboard validation before configured stages execute
+
+pipeline/subtitles.py
+  draft SRT timing derived from storyboard shot durations
 ```
 
-`storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. The current test suite checks valid and invalid storyboard cases.
+`storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover the cache, retry, logging, orchestration, and draft subtitle utilities.
 
-There are no production-stage scripts, generated assets, `runs.jsonl`, or final exports in the repository yet.
+These utilities are foundations, not provider integrations. There are no AI asset-generation adapters, generated assets, `runs.jsonl`, or final exports in the repository yet.
 
 ## Planned production flow
 
@@ -43,7 +58,7 @@ FFmpeg assembly and validation
       +--> 16:9 export
 ```
 
-The stages are planned, not implemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
+The image, video, music, and narration generation stages are planned, not implemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
 
 ## Stage contracts (planned)
 
@@ -54,7 +69,7 @@ Each stage will read the validated storyboard and write assets or metadata under
 | Keyframes | Character descriptions, visual style, image prompts, shot seeds, aspect-ratio framing | Character/style reference sheet and one approved still per shot | Not implemented |
 | Moving shots | Approved keyframe, motion prompt, duration, seed | Short video clips for selected shots | Not implemented |
 | Music | Instrumental direction, music cues, timing, seed | Candidate score(s) and selected score | Not implemented |
-| Narration and subtitles | Amharic narration, English subtitle text, narration settings | Narration audio and timed subtitle file | Not implemented |
+| Narration and subtitles | Amharic narration, English subtitle text, narration settings | Narration audio and timed subtitle file | Draft SRT writer exists; narration generation and final audio synchronization are not implemented |
 | Assembly | Approved media, shot durations, end-card details, export ratios | Radio cut, mixed film, and two final aspect-ratio exports | Not implemented |
 
 The narration-only radio cut is an early story prototype. It must be reviewed before spending time or quota on expensive visual generation.
@@ -67,9 +82,9 @@ The current command is:
 .\.venv\Scripts\python.exe validate_storyboard.py
 ```
 
-Production orchestration must call the same validation function before invoking any provider or modifying generated assets. A validation error should stop the run and identify the invalid field; it must not be converted into a success-shaped fallback.
+`pipeline/orchestrator.py` calls `require_valid_storyboard()` before invoking any configured stage. A validation error stops the run before the first stage; a stage error propagates and prevents later stages from running. Production provider stages have not been registered yet.
 
-## Caching (planned)
+## Caching helper (implemented; production integration pending)
 
 Cache each generated item independently so an unchanged shot can be reused. A cache key should be a stable hash of all inputs that can affect that item, including:
 
@@ -79,17 +94,17 @@ Cache each generated item independently so an unchanged shot can be reused. A ca
 - Provider, model/version, parameters, and seed.
 - Dependency hashes from earlier stages.
 
-When an input changes, invalidate that item and only its downstream dependents. For example, changing one motion prompt should not regenerate unrelated keyframes or the score. Final assembly may rerun to incorporate changed inputs without making new model calls. Cache metadata and files should remain inspectable. This mechanism is not implemented yet.
+`pipeline/cache.py` implements stable input hashing, includes the contents of named reference files, and derives cache output paths. Its unit tests cover deterministic keys, invalidation when a prompt or reference changes, and empty-file handling. Production stages do not consume the cache helper yet.
 
-## Retries and failures (planned)
+## Retries and failures (helper implemented; provider integration pending)
 
-Retries should be bounded and limited to transient failures such as timeouts or rate limits. Validation errors, missing credentials, permission errors, and other permanent failures should stop clearly rather than retry indefinitely. Record each real attempt and its outcome. If moving-shot generation is unavailable, the documented fallback is a slow FFmpeg pan/zoom over an approved still; record that fallback honestly.
+`pipeline/retry.py` implements bounded retries for caller-declared transient exception types. Validation errors, missing credentials, permission errors, and other undeclared failures are not retried. Provider wrappers must log every actual attempt. If moving-shot generation is unavailable, the documented fallback is a slow FFmpeg pan/zoom over an approved still; record that fallback honestly. No provider wrapper currently uses the retry helper.
 
 No provider calls or generation failures have been recorded by the current pipeline because those stages do not exist yet.
 
-## Run logging and cost evidence (planned)
+## Run logging and cost evidence (logger implemented; provider integration pending)
 
-`runs.jsonl` will contain one JSON object per actual model/API call, including at least:
+`pipeline/runlog.py` provides `append_model_call()` to append one JSON object per actual model/API call, including:
 
 - Timestamp, run identifier, stage, shot, and attempt.
 - Provider and model/version.
@@ -97,7 +112,9 @@ No provider calls or generation failures have been recorded by the current pipel
 - Input/cache fingerprint, status, and latency.
 - Billed cost and/or list-price-equivalent cost, with the pricing basis or `null` when it cannot be verified.
 
-Never log API keys, authorization headers, private personal data, or full secret-bearing environment values. Cache hits are not model calls and must not be logged as if a provider ran. The log does not exist yet because no model calls have been made.
+The helper redacts sensitive parameter fields and common credential patterns. Callers must still avoid placing raw prompts or secret-bearing data in parameters; use a prompt hash instead. Never log API keys, authorization headers, private personal data, or full secret-bearing environment values. Cache hits are not model calls and must not be logged as if a provider ran. No provider has called the logger, and `runs.jsonl` does not exist because no model calls have been made.
+
+`pipeline/subtitles.py` can write an English SRT using cumulative storyboard shot durations after validation. These are draft timings only; final subtitles must be checked against generated narration.
 
 ## Configuration and secrets
 
@@ -112,4 +129,4 @@ The current lightweight checks are:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Planned pipeline tests will use mocked provider calls to test validation-before-generation, deterministic cache keys and invalidation, bounded retry behavior, failure reporting, secret-safe run logs, and FFmpeg command construction without making paid or heavy model calls. Actual hosted provider smoke tests and media inspection will be recorded separately and run only after service access, terms, and costs are checked.
+The current tests use temporary files and fake stages to cover validation-before-generation, deterministic cache keys and invalidation, bounded retry behavior, secret-safe run logs, and draft subtitle timing. Future FFmpeg command tests should avoid requiring media generation or paid model calls. Actual hosted provider smoke tests and media inspection will be recorded separately and run only after service access, terms, and costs are checked.
