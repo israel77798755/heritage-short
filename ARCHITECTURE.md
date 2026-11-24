@@ -22,6 +22,9 @@ pipeline/cache.py
 pipeline/cached_generation.py
   cache lookup before provider calls; cache misses use retries and run logging
 
+pipeline/keyframes.py
+  provider-injected storyboard keyframe stage with character/style references
+
 pipeline/retry.py
   bounded retries for explicitly classified transient errors
 
@@ -94,7 +97,7 @@ Each stage will read the validated storyboard and write assets or metadata under
 
 | Stage | Inputs from the storyboard | Planned outputs | Status |
 |---|---|---|---|
-| Keyframes | Character descriptions, visual style, image prompts, shot seeds, aspect-ratio framing | Character/style reference sheet and one approved still per shot | Not implemented |
+| Keyframes | Validated storyboard, approved Almaz/Dawit/style reference images, shot seeds | One cached still per shot, with scene references and prompts | Callable provider-injected stage is implemented and fake-tested; reference creation/review and real provider execution are pending |
 | Moving shots | Approved keyframe, motion prompt, duration, seed | Short video clips for selected shots | Not implemented |
 | Music | Instrumental direction, music cues, timing, seed | Candidate score(s) and selected score | Not implemented |
 | Narration and subtitles | Amharic narration, English subtitle text, narration settings | Narration audio and timed subtitle file | Draft SRT writer exists; narration generation and final audio synchronization are not implemented |
