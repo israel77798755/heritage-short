@@ -4,6 +4,8 @@
 
 > **Project status:** The storyboard contract, validator, pipeline helpers, media preflight, and tested FFmpeg command builders are present. No provider-backed generation or real media render has run. FFmpeg and ffprobe are not installed on the current PATH.
 
+See [REPORT.md](REPORT.md) for the current implementation progress report; it is not a final evaluation of a completed film.
+
 ## Story
 
 Almaz, a fictional Ethiopian mother, passes everyday wisdom to her young son Dawit. Across ten planned shots, he learns to trust God, respect others, keep trying when work is difficult, and remain hopeful through hardship. The story is set in the Ethiopian highlands and is planned with Amharic narration and English subtitles.
@@ -43,6 +45,7 @@ heritage-short/
 ├── EXPERIMENTS.md
 ├── FAILURES.md
 ├── README.md
+├── REPORT.md
 ├── requirements.txt
 ├── storyboard.json
 ├── validate_storyboard.py
@@ -180,7 +183,7 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - FFmpeg command builders for still-image pan/zoom, normalized shot clips, a narration-only radio cut, and selectable-subtitle 1080p vertical/horizontal exports.
 - Music sidechain ducking, final loudness normalization (-14 LUFS / -1 dBTP), three-second disclosure card, and export duration/stream validation.
 - Mocked assembly tests; no FFmpeg executable or real source media was available for an actual render.
-- Project documentation, dependency declarations, placeholder environment template, and ethics policy.
+- Project documentation, a progress report (not a final film evaluation), dependency declarations, placeholder environment template, and ethics policy.
 
 ### Still to do
 
