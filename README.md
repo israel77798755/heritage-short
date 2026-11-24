@@ -104,6 +104,8 @@ python -m venv .venv
 
 No API key or `.env` file is needed to validate the storyboard or run the offline tests. Do not create or enter provider credentials for this offline workflow. If a provider is separately approved later, `.env.example` contains placeholders and the optional `.env` file is excluded by `.gitignore`.
 
+`requirements.txt` lists only the current local dependencies: `jsonschema` for schema validation and `python-dotenv` for optional local environment-file loading. The Gemini image adapter uses Python's standard-library HTTP client; no provider SDK or AI model package is needed for the offline workflow.
+
 ## Environment variables
 
 `pipeline/config.py` loads a local `.env` with `python-dotenv` and provides `get_env()` for reading required or optional variables. It does not print or log their values.
