@@ -51,6 +51,7 @@ heritage-short/
 │   ├── cache.py
 │   ├── config.py
 │   ├── orchestrator.py
+│   ├── providers.py
 │   ├── retry.py
 │   ├── runlog.py
 │   └── subtitles.py
@@ -125,13 +126,14 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Bounded retry helper for caller-classified transient errors (not yet connected to providers).
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
 - Validation-gated stage orchestrator (no production stages are registered yet).
+- Provider-neutral text, image, video, music, and narration capability contracts; no concrete provider adapter is implemented.
 - Draft English SRT generation from storyboard shot durations (not final narration sync).
 - Project documentation, dependency declarations, placeholder environment template, and ethics policy.
 
 ### Still to do
 
 - Have an Amharic speaker review narration, subtitles, and pronunciation guidance.
-- Implement provider interfaces and script/story and production-stage workflows.
+- Implement concrete provider adapters and script/story and production-stage workflows.
 - Generate and review reference images, keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
 - Integrate cache, retry, failure handling, and `runs.jsonl` logging with actual provider calls.
 - Create the narration-only radio cut and conduct both audience tests with at least three people each; neither test has happened yet.
