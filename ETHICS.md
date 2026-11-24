@@ -37,9 +37,9 @@ This project will not use a real person's image, voice, or personal story withou
 | Category | Status | Notes |
 |----------|--------|-------|
 | Character likenesses | ✅ Not needed | All characters are fictional |
-| Voice cloning | ✅ Not needed | Using standard Gemini TTS voices, not cloned from a real person |
+| Real-person voice use or cloning | ✅ None used | No voice has been generated; a synthetic narration provider and voice have not been selected |
 | Personal family stories | ✅ Not needed | The story is fictional and not based on a specific real family |
-| Audience test participants | ⏳ Pending | Voluntary verbal consent will be obtained before each test session; participants will be informed their feedback may be quoted anonymously in DESIGN.md |
+| Audience test participants | Not recruited; tests not conducted | Obtain voluntary informed consent before each session; no consent or feedback is claimed yet |
 
 ### 2.3 Audience Testing Consent
 
@@ -85,7 +85,7 @@ Every model, tool, and asset used in this project must have its license verified
 | Tool / Model | Purpose | License | Commercial use? | Status |
 |---|---|---|---|---|
 | Gemini 3.8 Flash | Script, prompts, translation | Google AI Terms of Service | Subject to ToS | ⏳ To verify before first API call |
-| Gemini 3.8 Flash TTS | Amharic narration | Google AI Terms of Service | Subject to ToS | ⏳ To verify before first API call |
+| Gemini 3.8 Flash TTS | Possible narration candidate | Google AI Terms of Service | Subject to ToS | ⏳ Amharic support, service terms, and quota still need verification |
 | FLUX.1 schnell / FLUX.2 klein 4B | Keyframe image generation | Apache 2.0 (4B variant) | Yes (Apache 2.0) | ⏳ To verify before first API call |
 | Wan 2.2 TI2V-5B | Image-to-video generation | Apache 2.0 | Yes | ⏳ To verify before first use |
 | ACE-Step 1.5 | Original music generation | MIT | Yes | ⏳ To verify before first use |
@@ -100,6 +100,7 @@ Every model, tool, and asset used in this project must have its license verified
 - An original score using ACE-Step 1.5 is planned; no score has been generated or selected.
 - Before using generated outputs, record the exact model/version, applicable service terms, and any required attribution or provenance.
 - No font has been selected for the final export. Verify its license before use.
+- Google’s [Gemini 3.8 Flash TTS model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash-tts) lists free-tier text and audio pricing as free of charge, and marks free-tier content as used to improve Google products. Actual quota, Amharic support, and applicable terms have not been verified for this project. No Gemini request has been made; paid API use still requires explicit approval.
 
 ### 4.4 Fonts
 
