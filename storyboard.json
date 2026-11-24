@@ -1,0 +1,269 @@
+{
+  "title": "The Wisdom of Our Mothers (የእናቶቻችን ጥበብ)",
+  "title_en": "The Wisdom of Our Mothers",
+  "title_am": "የእናቶቻችን ጥበብ",
+  "target_duration_seconds": 75,
+  "minimum_duration_seconds": 60,
+  "maximum_duration_seconds": 90,
+  "language": "am",
+  "subtitle_language": "en",
+  "aspect_ratios": [
+    "9:16",
+    "16:9"
+  ],
+  "creative_note": "A fictional, emotionally grounded Ethiopian short film about a mother (Almaz) and her young son (Dawit) in the Ethiopian highlands. Narrated in Amharic with English subtitles, it weaves four timeless lessons—trusting God, respecting others, never giving up, and holding onto hope in difficult times—into warm everyday moments of prayer, hospitality, study, and weather passing into sunlight.",
+  "lessons": [
+    {
+      "id": "trust_god",
+      "lesson_en": "Trust God",
+      "lesson_am": "በእግዚአብሔር መታመን",
+      "scene_numbers": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "respect_others",
+      "lesson_en": "Respect other people",
+      "lesson_am": "ሰውን ማክበር",
+      "scene_numbers": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": "never_give_up",
+      "lesson_en": "Never give up",
+      "lesson_am": "ፈጽሞ እጅ አለመስጠት",
+      "scene_numbers": [
+        6,
+        7
+      ]
+    },
+    {
+      "id": "remain_hopeful",
+      "lesson_en": "Remain hopeful, even during difficult times",
+      "lesson_am": "በአስቸጋሪ ጊዜም ተስፋን መያዝ",
+      "scene_numbers": [
+        8,
+        9
+      ]
+    }
+  ],
+  "visual_style": {
+    "style_block": "Cinematic realism, 35mm film grain, warm golden-hour and hearth-lit color grading, natural skin textures, authentic Ethiopian highland domestic architecture, soft shallow depth of field, respectful intimate framing, emotionally warm, no on-screen text.",
+    "palette": "Warm ochre, earthen clay, soft ivory cotton, deep forest green, amber sunlight, cool slate blue only during the rainstorm beat.",
+    "lighting": "Natural morning window light, warm hearth glow, and golden post-rain sunbeams.",
+    "framing_note": "Keep main subjects centered in the middle third of the frame so 16:9 horizontal and 9:16 vertical crops preserve faces, hands, and emotional action without clipping."
+  },
+  "characters": {
+    "mother": {
+      "name": "Almaz",
+      "name_am": "አልማዝ",
+      "fictional": true,
+      "description": "Fictional Ethiopian mother in her early 40s, warm expressive brown eyes, calm and dignified bearing, braided hair partially covered by a traditional white woven cotton netela with subtle geometric tibeb border, wearing a simple modest earth-toned dress."
+    },
+    "child": {
+      "name": "Dawit",
+      "name_am": "ዳዊት",
+      "fictional": true,
+      "description": "Fictional Ethiopian boy around 9 years old, short curly black hair, bright observant eyes, wearing a clean cream cotton shirt and navy knit sweater, carrying a worn cloth school satchel."
+    }
+  },
+  "narration_config": {
+    "language": "am-ET",
+    "voice_persona": "Warm, reflective adult narrator remembering a mother's voice; calm, unhurried, clear Amharic pronunciation.",
+    "style_instruction": "Speak in warm, gentle, unhurried Amharic with natural pauses between phrases.",
+    "target_speaking_pace": "Approximately 1.8 to 2.2 words per second to leave breathing room for music and emotional beats."
+  },
+  "music": {
+    "instrumental_only": true,
+    "style": "Warm cinematic underscore blending gentle Ethiopian krar-inspired plucked strings and airy washint flute textures with soft acoustic piano and warm low strings.",
+    "tempo_bpm": 72,
+    "key": "D minor / F major",
+    "mood": "Tender, reverent, resilient, gradually lifting into quiet hope.",
+    "caption": "Instrumental warm cinematic film score, gentle Ethiopian krar-like plucked acoustic strings, soft felt piano, airy wooden flute texture, subtle warm cello pad, 72 BPM, calm and emotional underscore with space for voice narration, no vocals, no drums.",
+    "mixing_note": "Duck original music beneath Amharic narration using sidechain compression (approx. -12 dB under speech, rising gently during pauses), then normalize final mix to -14 LUFS with -1 dB true peak."
+  },
+  "end_card": {
+    "duration_seconds": 3,
+    "title_en": "The Wisdom of Our Mothers",
+    "title_am": "የእናቶቻችን ጥበብ",
+    "disclosure_en": "Created with AI tools for story, visuals, narration, and music.",
+    "disclosure_am": "ይህ አጭር ፊልም በአርቲፊሻል ኢንተለጀንስ (AI) መሳሪያዎች ተዘጋጅቷል።",
+    "visual_description": "Clean warm dark-earth background with subtle ivory typography centered inside both 9:16 and 16:9 safe areas, fading smoothly from Shot 10.",
+    "audio_description": "Final warm krar and piano chord resolves gently and fades to silence."
+  },
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Dawn Prayer and Morning Light",
+      "lesson": "opening",
+      "purpose": "Establish the Ethiopian highland setting, dawn atmosphere, and the mother's quiet morning presence.",
+      "duration_seconds": 7,
+      "shot_size": "Wide establishing shot",
+      "camera_movement": "Slow gentle push-in",
+      "visual": "At dawn in an Ethiopian highland home courtyard, soft golden mist drifts over green hills. Through an open wooden doorway, Almaz, an Ethiopian mother in a white woven netela, tends a glowing clay jebena hearth as warm morning light fills the room.",
+      "image_prompt": "Wide establishing shot of a peaceful Ethiopian highland courtyard at dawn, soft morning mist over distant green hills, warm golden light spilling from an open doorway where a fictional Ethiopian mother in her early 40s wearing a white cotton netela with subtle tibeb border tends a traditional clay jebena coffee pot over warm embers, cinematic realism, 35mm film grain, warm ochre and ivory tones, center-framed composition, no text.",
+      "motion_prompt": "Slow gentle camera push-in toward the sunlit doorway, soft morning mist drifting outside, subtle steam rising from the jebena, calm natural motion.",
+      "narration": "ገና ፀሐይ ሳትወጣ፣ የእናቴን ጸሎትና የጠዋት ድምፅ እሰማ ነበር።",
+      "subtitle_en": "Before sunrise, I would hear\nmy mother's quiet morning prayer.",
+      "audio": "Soft dawn room tone and distant birdsong; gentle plucked krar-inspired notes begin quietly.",
+      "music_cue": "cue_1_dawn_intro",
+      "seed": 1001
+    },
+    {
+      "scene_number": 2,
+      "title": "Trust God",
+      "lesson": "trust_god",
+      "purpose": "Introduce the first lesson—trusting God—through a tender morning moment between mother and child.",
+      "duration_seconds": 8,
+      "shot_size": "Medium shot",
+      "camera_movement": "Slow static hold with subtle breath of motion",
+      "visual": "Inside the warm earthen-walled room, morning sunbeams fall across Almaz and her 9-year-old son Dawit sitting side by side on low wooden stools. Almaz rests a gentle hand near his shoulder as they bow their heads in quiet prayer.",
+      "image_prompt": "Medium shot inside a warm traditional Ethiopian home, golden morning sunbeams from a wooden window illuminating a fictional Ethiopian mother in her early 40s in a white netela and her 9-year-old son in a cream shirt and navy sweater sitting side by side on low wooden stools, heads gently bowed in quiet prayer, peaceful affectionate expression, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Locked-off gentle camera with subtle dust motes drifting in the sunbeam, mother and child breathing calmly and lifting their heads slowly with serene warmth.",
+      "narration": "«ልጄ፣ መንገዱ ሲከብድህ በእግዚአብሔር ታመን፤ እርሱ አይተውህም» ትለኝ ነበር።",
+      "subtitle_en": "\"When the road grows heavy, trust in God;\nHe will never leave you.\"",
+      "audio": "Warm underscore ducks gently beneath Amharic narration; soft felt piano supports the krar motif.",
+      "music_cue": "cue_2_trust_god",
+      "seed": 1002
+    },
+    {
+      "scene_number": 3,
+      "title": "Peace in Faith",
+      "lesson": "trust_god",
+      "purpose": "Reinforce the first lesson visually through a close, intimate detail of maternal care and steady faith.",
+      "duration_seconds": 7,
+      "shot_size": "Close-up",
+      "camera_movement": "Gentle tilt up from hands to faces",
+      "visual": "A warm close-up of Almaz's steady hands adjusting the collar of Dawit's sweater and resting reassuringly on his shoulder before he heads out, her face calm with quiet faith.",
+      "image_prompt": "Warm close-up of a fictional Ethiopian mother's gentle hands adjusting her 9-year-old son's navy knit sweater collar by morning window light, both faces softly illuminated with calm faith and tenderness, shallow depth of field, centered framing, cinematic realism, 35mm film look, no text.",
+      "motion_prompt": "Gentle slow camera tilt upward from the mother's hands to her calm reassuring smile, natural soft fabric movement in warm morning light.",
+      "narration": "በጸሎቷ ውስጥ የማይናወጥ ሰላምና በፈጣሪ ላይ ሙሉ እምነት አይ ነበር።",
+      "subtitle_en": "In her prayers, I saw unshakable peace\nand complete faith in the Creator.",
+      "audio": "Soft cloth rustle under sustained warm strings and gentle piano notes.",
+      "music_cue": "cue_2_trust_god",
+      "seed": 1003
+    },
+    {
+      "scene_number": 4,
+      "title": "Respect Every Person",
+      "lesson": "respect_others",
+      "purpose": "Present the second lesson—respecting other people—in an everyday Ethiopian community interaction.",
+      "duration_seconds": 8,
+      "shot_size": "Medium wide shot",
+      "camera_movement": "Gentle lateral tracking",
+      "visual": "Along an earthen neighborhood path lined with eucalyptus trees in warm morning light, Almaz greets an elderly neighbor with a respectful slight bow and guides Dawit to help carry the elder's woven basket.",
+      "image_prompt": "Medium wide shot on an sunlit earthen village path with eucalyptus trees in Ethiopia, a fictional Ethiopian mother in a white netela bowing slightly with warm respect while greeting an elderly neighbor, guiding her 9-year-old son in a navy sweater to politely help hold a woven basket, warm natural daylight, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Gentle slow tracking camera alongside the path, the mother nodding warmly and the boy stepping forward respectfully to take the basket handle, soft leaves swaying.",
+      "narration": "«ሰውን ሁሉ አክብር፤ ክብር የሰው ልጅ ውበት ነው» ብላ አስተምራኛለች።",
+      "subtitle_en": "\"Respect every person;\ndignity is the true beauty of humanity.\"",
+      "audio": "Light outdoor footsteps and gentle breeze; warm washint flute tone enters softly beneath narration.",
+      "music_cue": "cue_3_respect_community",
+      "seed": 1004
+    },
+    {
+      "scene_number": 5,
+      "title": "A Place at the Mesob",
+      "lesson": "respect_others",
+      "purpose": "Deepen the second lesson by showing humility and hospitality around the family mesob.",
+      "duration_seconds": 7,
+      "shot_size": "Medium shot",
+      "camera_movement": "Slow push-in",
+      "visual": "Around a colorful woven mesob table, Almaz gracefully serves warm injera to the elderly neighbor and Dawit first, modeling humility and care for both elders and the young.",
+      "image_prompt": "Warm medium shot inside an Ethiopian dining corner around a traditional woven mesob table, a fictional Ethiopian mother in a white netela gently serving injera with warm hospitality to an elderly guest and her 9-year-old son, soft golden indoor light, rich earthy colors, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Slow gentle push-in toward the mesob table as the mother serves food with calm grace and exchanges a warm smile with the elder and child.",
+      "narration": "ለታላቅም ለታናሽም በትሕትና ቦታ መስጠትን ከተግባሯ ተማርኩ።",
+      "subtitle_en": "From her deeds, I learned humility\nand respect for both elders and the young.",
+      "audio": "Subtle warm table ambience and soft acoustic guitar/krar arpeggios under clear narration.",
+      "music_cue": "cue_3_respect_community",
+      "seed": 1005
+    },
+    {
+      "scene_number": 6,
+      "title": "Never Give Up",
+      "lesson": "never_give_up",
+      "purpose": "Introduce the third lesson—never giving up—as the mother encourages her child through frustration.",
+      "duration_seconds": 8,
+      "shot_size": "Medium close-up",
+      "camera_movement": "Slow push-in",
+      "visual": "At a worn wooden table in late afternoon light, Dawit stares discouraged at an open school notebook after erasing a mistake. Almaz sits beside him, placing her hand steadily over his to encourage him to keep trying.",
+      "image_prompt": "Medium close-up at a wooden table lit by warm late afternoon window light, a fictional 9-year-old Ethiopian boy looking discouraged over an open school notebook and pencil, his Ethiopian mother in her early 40s leaning close beside him with a steady, encouraging hand on his arm, warm empathetic expression, centered framing, cinematic realism, 35mm film look, no text.",
+      "motion_prompt": "Slow steady push-in as the boy sighs and looks down, then lifts his eyes as his mother gently places her hand beside his notebook and nods encouragingly.",
+      "narration": "«ብትወድቅም ተነሳ እንጂ፣ ፈጽሞ እጅ አትስጥ፤ ጥረትህን ቀጥል» ትል ነበር።",
+      "subtitle_en": "\"Even if you fall, rise again—never give up;\nkeep pushing forward.\"",
+      "audio": "Brief reflective pause in music, then a steady reassuring piano and cello phrase beneath narration.",
+      "music_cue": "cue_4_perseverance",
+      "seed": 1006
+    },
+    {
+      "scene_number": 7,
+      "title": "Trying Again",
+      "lesson": "never_give_up",
+      "purpose": "Show the third lesson taking root as frustration turns into quiet determination.",
+      "duration_seconds": 7,
+      "shot_size": "Close-up",
+      "camera_movement": "Gentle static hold",
+      "visual": "Close-up of Dawit picking up his pencil again with quiet resolve, writing carefully in the notebook while Almaz watches from just behind him with a proud, gentle smile.",
+      "image_prompt": "Close-up of a fictional 9-year-old Ethiopian boy gripping a pencil with quiet determination as he writes carefully in a notebook on a wooden desk, his mother softly out of focus in the warm background watching proudly, golden afternoon rim light, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Static intimate close-up with natural hand motion as the boy writes steadily and glances up with quiet confidence, warm golden light on his face.",
+      "narration": "በትዕግሥቷ፣ መሸነፍ ሳይሆን እንደገና መሞከር ጥንካሬ እንደሆነ አወቅሁ።",
+      "subtitle_en": "Through her patience, I learned strength means\ntrying again, not giving in.",
+      "audio": "Soft pencil-on-paper sound effect; music swells subtly with determined warmth.",
+      "music_cue": "cue_4_perseverance",
+      "seed": 1007
+    },
+    {
+      "scene_number": 8,
+      "title": "Hope in the Storm",
+      "lesson": "remain_hopeful",
+      "purpose": "Deliver the fourth lesson—remaining hopeful even during difficult times—contrasting a dark storm with inner warmth.",
+      "duration_seconds": 8,
+      "shot_size": "Medium shot",
+      "camera_movement": "Slow steady pull-back",
+      "visual": "During a heavy highland rainstorm, cool blue-grey rain falls outside the open doorway. Inside, lit by a warm glowing hearth, Almaz wraps her cotton netela around Dawit's shoulders and points calmly toward a sliver of light at the horizon.",
+      "image_prompt": "Medium shot inside an Ethiopian home doorway during a heavy highland rainstorm, cool slate-blue rain visible outside while warm orange hearth light illuminates a fictional Ethiopian mother wrapping her white cotton netela around her 9-year-old son, mother gently pointing toward a faint break in the dark clouds on the horizon, emotional warmth amidst hardship, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Slow gentle pull-back while rain falls steadily outside the doorway, warm firelight flickering softly on their faces as the mother holds her son close.",
+      "narration": "«ዝናብና ጨለማ ቢበዛም፣ ነገ ብሩህ ቀን አለ፤ ተስፋህን አትጣል»።",
+      "subtitle_en": "\"Even in the darkest storm, tomorrow brings light;\nnever lose your hope.\"",
+      "audio": "Gentle rain ambience layered softly; low warm cello holds steady under narration.",
+      "music_cue": "cue_5_hope_in_storm",
+      "seed": 1008
+    },
+    {
+      "scene_number": 9,
+      "title": "Light After Hardship",
+      "lesson": "remain_hopeful",
+      "purpose": "Visually fulfill the fourth lesson as clouds part and mother and child walk into renewed daylight.",
+      "duration_seconds": 8,
+      "shot_size": "Wide-to-medium shot",
+      "camera_movement": "Gentle forward glide",
+      "visual": "After the rain, bright golden sunbeams break through parting clouds over lush wet highland hills. Almaz and Dawit walk hand in hand along the glistening path, looking ahead with quiet hope.",
+      "image_prompt": "Wide-to-medium shot after a rainstorm in the Ethiopian highlands, dramatic golden sunbeams breaking through parting clouds over wet emerald-green hills, a fictional Ethiopian mother in a white netela and her 9-year-old son walking hand in hand down a sunlit path toward the morning horizon, hopeful uplifting atmosphere, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Gentle forward camera glide following mother and child walking hand in hand as golden sunlight expands across the wet landscape and mist lifts.",
+      "narration": "በአስቸጋሪ ጊዜም እንኳ፣ የተስፋ ብርሃን በልባችን ውስጥ እንዳይጠፋ ጠብቃለች።",
+      "subtitle_en": "Even in the hardest times,\nshe kept the light of hope burning in our hearts.",
+      "audio": "Rain fades into clear birdsong; score lifts brightly with krar, piano, and airy washint motif.",
+      "music_cue": "cue_6_hope_fulfilled",
+      "seed": 1009
+    },
+    {
+      "scene_number": 10,
+      "title": "Her Wisdom Lives On",
+      "lesson": "closing",
+      "purpose": "Close the emotional arc, tying the mother's four lessons to the narrator's present life.",
+      "duration_seconds": 7,
+      "shot_size": "Medium close-up",
+      "camera_movement": "Slow poetic pull-back",
+      "visual": "In warm golden morning light, the grown narrator's hands rest beside the well-worn notebook and a folded white cotton netela on a wooden table, echoing the opening hearth glow as light fills the frame.",
+      "image_prompt": "Warm poetic medium close-up of a wooden table bathed in golden morning sunbeams, an adult's hands resting gently on a folded traditional white Ethiopian cotton netela beside a worn school notebook and a warm clay coffee cup, peaceful nostalgic atmosphere, shallow depth of field, centered framing, cinematic realism, 35mm film grain, no text.",
+      "motion_prompt": "Slow poetic camera pull-back as warm golden morning sunlight brightens across the table and gentle steam curls upward.",
+      "narration": "ዛሬም በሕይወቴ ውስጥ፣ የእናቴ ጥበብ መሪ ብርሃኔ ሆኖ ይኖራል።",
+      "subtitle_en": "Today and always, my mother's wisdom\nlives on as my guiding light.",
+      "audio": "Narration finishes cleanly; the main krar and piano theme resolves on a warm major chord and fades toward the end card.",
+      "music_cue": "cue_7_closing_resolution",
+      "seed": 1010
+    }
+  ]
+}
