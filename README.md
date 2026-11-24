@@ -2,7 +2,7 @@
 
 **The Wisdom of Our Mothers (የእናቶቻችን ጥበብ)** is a planned short film and a small Python project for building a reproducible AI-assisted film-production pipeline. The film tells a fictional Ethiopian family story; the code is intended to turn its storyboard into images, moving shots, sound, and finished video.
 
-> **Project status:** The storyboard contract, JSON Schema, validator, tests, shared configuration, cache/retry/logging/orchestration helpers, and draft subtitle writer are present. These are foundations; provider-backed generation, integrated production stages, and finished media are not implemented yet. This README distinguishes current code from planned work.
+> **Project status:** The storyboard contract, validator, pipeline helpers, media preflight, and tested FFmpeg command builders are present. No provider-backed generation or real media render has run. FFmpeg and ffprobe are not installed on the current PATH.
 
 ## Story
 
@@ -26,9 +26,9 @@ Story and script development happen before media generation. The planned product
 2. **Moving shots:** Animate selected keyframes. Wan 2.2 is a candidate for Kaggle or Colab execution.
 3. **Music:** Generate and choose an original instrumental score. ACE-Step is a candidate for Kaggle or Colab execution.
 4. **Narration:** Generate Amharic narration and check pronunciation and pacing. Gemini TTS is a candidate, subject to model availability and free-tier checks.
-5. **Assembly:** Use FFmpeg to add subtitles and the AI disclosure end card, mix narration and music, duck music under speech, normalize loudness, and export both aspect ratios.
+5. **Assembly:** Tested command builders prepare a narration-only WAV radio cut and 9:16 / 16:9 video exports. They include an English subtitle track, a disclosure end card, music ducking, loudness normalization, output checks, and a still-image pan/zoom fallback. Real rendering awaits FFmpeg, ffprobe, approved media assets, and a licensed font with Amharic glyph coverage.
 
-The cache, bounded-retry, model-call logging, and validation-gated orchestration helpers exist, but no provider stage uses them yet. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. Provider-backed generation, the radio cut, and finished exports are **planned work**, not available end-to-end. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
+The cache, bounded-retry, model-call logging, and validation-gated orchestration helpers exist, but no provider stage uses them yet. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. The assembly workflow has command-level tests but has not rendered real outputs. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
 
 ## Current project structure
 
@@ -48,8 +48,10 @@ heritage-short/
 ├── validate_storyboard.py
 ├── pipeline/
 │   ├── __init__.py
+│   ├── assembly.py
 │   ├── cache.py
 │   ├── config.py
+│   ├── media_preflight.py
 │   ├── orchestrator.py
 │   ├── provider_runner.py
 │   ├── providers.py
@@ -59,7 +61,9 @@ heritage-short/
 ├── schema/
 │   └── storyboard.schema.json
 └── tests/
+    ├── test_assembly.py
     ├── test_cache.py
+    ├── test_media_preflight.py
     ├── test_orchestrator.py
     ├── test_provider_runner.py
     ├── test_retry.py
@@ -131,6 +135,10 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Provider-neutral text, image, video, music, and narration capability contracts; no concrete provider adapter is implemented.
 - Provider-call runner with bounded retries, output-file checks, prompt-hash logging, and per-attempt run records; no real provider calls have occurred.
 - Draft English SRT generation from storyboard shot durations (not final narration sync).
+- Assembly preflight checks FFmpeg/ffprobe paths, media streams, SRT timing, font-file presence, and writable output directories.
+- FFmpeg command builders for still-image pan/zoom, normalized shot clips, a narration-only radio cut, and selectable-subtitle 1080p vertical/horizontal exports.
+- Music sidechain ducking, final loudness normalization (-14 LUFS / -1 dBTP), three-second disclosure card, and export duration/stream validation.
+- Mocked assembly tests; no FFmpeg executable or real source media was available for an actual render.
 - Project documentation, dependency declarations, placeholder environment template, and ethics policy.
 
 ### Still to do
@@ -139,8 +147,9 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Implement concrete provider adapters and script/story and production-stage workflows.
 - Generate and review reference images, keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
 - Connect the cache helper and concrete provider adapters to production stages; real provider calls remain pending.
-- Create the narration-only radio cut and conduct both audience tests with at least three people each; neither test has happened yet.
-- Implement FFmpeg assembly and verify subtitles, music ducking, loudness, the end card, and both exports.
+- Once FFmpeg/ffprobe and approved assets are available, run preflight and render/inspect the radio cut and both aspect ratios; command-level tests are not a substitute for media inspection.
+- Provide and verify the license and Amharic glyph/shaping of the end-card font before rendering.
+- Conduct both audience tests with at least three people each; neither test has happened yet.
 - Continue recording real experiments, failures, and costs in their existing ledgers; create the written report and walkthrough video, and prepare the public post.
 
 There is not yet a one-command run of the complete pipeline. Costs, audience feedback, experiments, model results, generated media, and completed exports remain unrecorded or unfinished until they actually occur.
