@@ -50,6 +50,7 @@ class MediaInfo:
     duration_seconds: float | None
     has_video: bool
     has_audio: bool
+    has_subtitles: bool
     width: int | None
     height: int | None
 
@@ -65,6 +66,8 @@ class AssemblyPreflight:
     font_path: Path
     output_directories: Mapping[str, Path]
     final_output_paths: Mapping[str, Path]
+    radio_cut_path: Path
+    end_card_text: str
     story_duration_seconds: int
     total_duration_seconds: int
 
@@ -152,6 +155,10 @@ def probe_media(path: Path, ffprobe_path: Path) -> MediaInfo:
         isinstance(stream, dict) and stream.get("codec_type") == "audio"
         for stream in streams
     )
+    has_subtitles = any(
+        isinstance(stream, dict) and stream.get("codec_type") == "subtitle"
+        for stream in streams
+    )
     format_data = result.get("format")
     duration_value = (
         format_data.get("duration") if isinstance(format_data, dict) else None
@@ -165,13 +172,14 @@ def probe_media(path: Path, ffprobe_path: Path) -> MediaInfo:
         duration_seconds=duration,
         has_video=bool(video_streams),
         has_audio=has_audio,
+        has_subtitles=has_subtitles,
         width=width,
         height=height,
     )
 
 
-def validate_srt(path: Path) -> None:
-    """Reject empty, malformed, or non-monotonic SRT cue files."""
+def validate_srt(path: Path) -> int:
+    """Reject malformed cues and return the final cue's end time in milliseconds."""
     subtitle_path = _require_nonempty_file(path, "subtitle file")
     text = subtitle_path.read_text(encoding="utf-8-sig").strip()
     if not text:
@@ -203,6 +211,7 @@ def validate_srt(path: Path) -> None:
                 "Subtitle cue {} has no text.".format(expected_index)
             )
         previous_end_ms = end_ms
+    return previous_end_ms
 
 
 def preflight_assembly(
@@ -223,6 +232,8 @@ def preflight_assembly(
         storyboard_path=Path(storyboard_path),
         schema_path=Path(schema_path),
     )
+    story_duration = storyboard["target_duration_seconds"]
+    total_duration = story_duration + storyboard["end_card"]["duration_seconds"]
     resolved_ffmpeg = resolve_media_tool("ffmpeg", ffmpeg_path)
     resolved_ffprobe = resolve_media_tool("ffprobe", ffprobe_path)
 
@@ -275,7 +286,11 @@ def preflight_assembly(
 
     _require_audio(narration_path, resolved_ffprobe, "narration")
     _require_audio(music_path, resolved_ffprobe, "music")
-    validate_srt(Path(subtitle_path))
+    subtitle_end_ms = validate_srt(Path(subtitle_path))
+    if subtitle_end_ms > story_duration * 1000:
+        raise MediaPreflightError(
+            "Subtitle cues extend past the story and into the AI disclosure end card."
+        )
 
     font = _require_nonempty_file(font_path, "subtitle and end-card font")
     if font.suffix.lower() not in _FONT_EXTENSIONS:
@@ -297,8 +312,19 @@ def preflight_assembly(
             "wisdom-of-our-mothers-{}x{}.mp4".format(width, height)
         )
 
-    story_duration = storyboard["target_duration_seconds"]
-    total_duration = story_duration + storyboard["end_card"]["duration_seconds"]
+    radio_dir = output_root / "final" / "radio"
+    _ensure_writable_directory(radio_dir)
+    radio_cut_path = radio_dir / "wisdom-of-our-mothers-radio.wav"
+    end_card = storyboard["end_card"]
+    end_card_text = "\n".join(
+        (
+            end_card["title_en"],
+            end_card["title_am"],
+            "",
+            end_card["disclosure_en"],
+            end_card["disclosure_am"],
+        )
+    )
     return AssemblyPreflight(
         ffmpeg_path=resolved_ffmpeg,
         ffprobe_path=resolved_ffprobe,
@@ -309,6 +335,8 @@ def preflight_assembly(
         font_path=font,
         output_directories=output_directories,
         final_output_paths=final_output_paths,
+        radio_cut_path=radio_cut_path,
+        end_card_text=end_card_text,
         story_duration_seconds=story_duration,
         total_duration_seconds=total_duration,
     )

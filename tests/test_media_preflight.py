@@ -65,12 +65,47 @@ class TestMediaPreflight(unittest.TestCase):
             resolve_media_tool("ffmpeg", search_path="")
 
     def test_valid_srt_is_accepted_and_malformed_srt_is_rejected(self) -> None:
-        validate_srt(self.subtitles)
+        self.assertEqual(validate_srt(self.subtitles), 75_000)
         invalid = self.root / "invalid.srt"
         invalid.write_text("1\n00:00:02,000 --> 00:00:01,000\nBad cue\n", encoding="utf-8")
 
         with self.assertRaises(MediaPreflightError):
             validate_srt(invalid)
+
+    def test_subtitles_may_not_overlap_the_end_card(self) -> None:
+        late_subtitles = self.root / "late-subtitles.srt"
+        late_subtitles.write_text(
+            "1\n00:01:14,000 --> 00:01:16,000\nLate cue\n",
+            encoding="utf-8",
+        )
+
+        def fake_probe(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+            asset = Path(command[-1])
+            if asset.suffix == ".png":
+                streams = [{"codec_type": "video", "width": 1024, "height": 1024}]
+                duration = None
+            else:
+                streams = [{"codec_type": "audio"}]
+                duration = "75.0"
+            output = {"streams": streams, "format": {"duration": duration}}
+            return subprocess.CompletedProcess(
+                command, 0, stdout=json.dumps(output), stderr=""
+            )
+
+        with patch("pipeline.media_preflight.subprocess.run", side_effect=fake_probe):
+            with self.assertRaisesRegex(MediaPreflightError, "past the story"):
+                preflight_assembly(
+                    storyboard_path=STORYBOARD_PATH,
+                    schema_path=SCHEMA_PATH,
+                    shot_assets=self.shots,
+                    narration_path=self.narration,
+                    music_path=self.music,
+                    subtitle_path=late_subtitles,
+                    font_path=self.font,
+                    output_dir=self.output_dir,
+                    ffmpeg_path=self.ffmpeg,
+                    ffprobe_path=self.ffprobe,
+                )
 
     def test_preflight_validates_inputs_and_prepares_both_ratios(self) -> None:
         def fake_probe(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
