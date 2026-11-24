@@ -2,7 +2,7 @@
 
 **The Wisdom of Our Mothers (የእናቶቻችን ጥበብ)** is a planned short film and a small Python project for building a reproducible AI-assisted film-production pipeline. The film tells a fictional Ethiopian family story; the code is intended to turn its storyboard into images, moving shots, sound, and finished video.
 
-> **Project status:** The storyboard contract, JSON Schema, validator, validator tests, shared configuration helper, dependency list, environment template, and ethics policy are present. The production stages and finished media are not implemented yet. This README describes the current foundation separately from planned work.
+> **Project status:** The storyboard contract, JSON Schema, validator, tests, shared configuration, cache/retry/logging/orchestration helpers, and draft subtitle writer are present. These are foundations; provider-backed generation, integrated production stages, and finished media are not implemented yet. This README distinguishes current code from planned work.
 
 ## Story
 
@@ -28,7 +28,7 @@ Story and script development happen before media generation. The planned product
 4. **Narration:** Generate Amharic narration and check pronunciation and pacing. Gemini TTS is a candidate, subject to model availability and free-tier checks.
 5. **Assembly:** Use FFmpeg to add subtitles and the AI disclosure end card, mix narration and music, duck music under speech, normalize loudness, and export both aspect ratios.
 
-The production-stage scripts, caching, retries, model-call logging, radio cut, and exports are **planned work**, not available end-to-end yet. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
+The cache, bounded-retry, model-call logging, and validation-gated orchestration helpers exist, but no provider stage uses them yet. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. Provider-backed generation, the radio cut, and finished exports are **planned work**, not available end-to-end. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
 
 ## Current project structure
 
@@ -36,17 +36,32 @@ The production-stage scripts, caching, retries, model-call logging, radio cut, a
 heritage-short/
 ├── .env.example
 ├── .gitignore
+├── ARCHITECTURE.md
+├── COSTS.md
+├── DESIGN.md
 ├── ETHICS.md
+├── EXPERIMENTS.md
+├── FAILURES.md
 ├── README.md
 ├── requirements.txt
 ├── storyboard.json
 ├── validate_storyboard.py
 ├── pipeline/
 │   ├── __init__.py
-│   └── config.py
+│   ├── cache.py
+│   ├── config.py
+│   ├── orchestrator.py
+│   ├── retry.py
+│   ├── runlog.py
+│   └── subtitles.py
 ├── schema/
 │   └── storyboard.schema.json
 └── tests/
+    ├── test_cache.py
+    ├── test_orchestrator.py
+    ├── test_retry.py
+    ├── test_runlog.py
+    ├── test_subtitles.py
     └── test_validate_storyboard.py
 ```
 
@@ -104,18 +119,23 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 
 - A 10-shot, 75-second storyboard contract with Amharic narration text, English subtitles, four lesson tags, shot prompts, fictional character descriptions, seeds, aspect ratios, and a 3-second AI end card.
 - A JSON Schema and Python validator with semantic checks.
-- Unit tests for storyboard validation.
+- Unit tests for storyboard validation and the helper modules listed below.
 - Shared project paths and environment-variable helpers.
-- Dependency declarations, a placeholder environment template, and an ethics policy.
+- Content-based cache key and output-path helpers (not yet used by generation stages).
+- Bounded retry helper for caller-classified transient errors (not yet connected to providers).
+- JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
+- Validation-gated stage orchestrator (no production stages are registered yet).
+- Draft English SRT generation from storyboard shot durations (not final narration sync).
+- Project documentation, dependency declarations, placeholder environment template, and ethics policy.
 
 ### Still to do
 
 - Have an Amharic speaker review narration, subtitles, and pronunciation guidance.
-- Implement the script/story workflow and production-stage scripts.
+- Implement provider interfaces and script/story and production-stage workflows.
 - Generate and review reference images, keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
-- Implement caching, retries, failure handling, and `runs.jsonl` logging for actual model calls.
+- Integrate cache, retry, failure handling, and `runs.jsonl` logging with actual provider calls.
 - Create the narration-only radio cut and conduct both audience tests with at least three people each; neither test has happened yet.
 - Implement FFmpeg assembly and verify subtitles, music ducking, loudness, the end card, and both exports.
-- Complete the remaining documentation, actual experiment/failure/cost records, written report, walkthrough video, and public post.
+- Continue recording real experiments, failures, and costs in their existing ledgers; create the written report and walkthrough video, and prepare the public post.
 
 There is not yet a one-command run of the complete pipeline. Costs, audience feedback, experiments, model results, generated media, and completed exports remain unrecorded or unfinished until they actually occur.
