@@ -1,6 +1,6 @@
 # Architecture
 
-This document separates the **working foundation** from the **planned production pipeline**. The project currently validates a storyboard; it does not yet generate or assemble film media.
+This document separates the **working foundation** from the **planned production pipeline**. The project has tested assembly command builders, but it has not generated or assembled film media.
 
 ## Current foundation
 
@@ -36,11 +36,21 @@ pipeline/providers.py
 
 pipeline/provider_runner.py
   bounded retries, output checks, and per-attempt run logging
+
+pipeline/media_preflight.py
+  FFmpeg/ffprobe lookup, media probing, subtitle checks, and output directories
+
+pipeline/assembly.py
+  radio cut, still-image motion fallback, and two-ratio FFmpeg commands
 ```
 
-`storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover the cache, retry, logging, orchestration, and draft subtitle utilities.
+`storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover cache, retry, logging, orchestration, subtitle, media preflight, and assembly utilities.
 
 The protocols in `pipeline/providers.py` define separate text, image, video, music, and narration capabilities so an adapter can declare only what its service supports. `pipeline/provider_runner.py` connects an adapter call to bounded retries and `runs.jsonl` logging, verifies that a non-empty output file was created, and records only a prompt hash. No concrete AI provider adapter exists yet, and no real provider call has been made. There are no generated assets, `runs.jsonl`, or final exports in the repository yet.
+
+`pipeline/media_preflight.py` checks tool availability, probes every shot/audio input, validates the English SRT and licensed-font file, and prepares writable output directories for both aspect ratios and the radio cut. `pipeline/assembly.py` builds and runs FFmpeg commands for normalized shot clips, a still-image pan/zoom fallback, the narration-only WAV cut, and 9:16 / 16:9 exports. Final exports have selectable English subtitles, a centered disclosure card, music ducking, loudness normalization, and output-stream/duration checks. Existing outputs are never overwritten.
+
+The FFmpeg workflow has only been tested with mocked tools and temporary fake assets. `ffmpeg` and `ffprobe` are absent from the current PATH, so no command has rendered real media. A licensed font with Ethiopic glyph coverage must be supplied, and its shaping behavior still needs an actual render check.
 
 ## Planned production flow
 
@@ -76,7 +86,7 @@ Each stage will read the validated storyboard and write assets or metadata under
 | Moving shots | Approved keyframe, motion prompt, duration, seed | Short video clips for selected shots | Not implemented |
 | Music | Instrumental direction, music cues, timing, seed | Candidate score(s) and selected score | Not implemented |
 | Narration and subtitles | Amharic narration, English subtitle text, narration settings | Narration audio and timed subtitle file | Draft SRT writer exists; narration generation and final audio synchronization are not implemented |
-| Assembly | Approved media, shot durations, end-card details, export ratios | Radio cut, mixed film, and two final aspect-ratio exports | Not implemented |
+| Assembly | Approved media, shot durations, narration, score, subtitles, licensed font | Radio cut, mixed 9:16 and 16:9 videos, disclosure card | Command builders and mocked tests implemented; real rendering awaits FFmpeg and approved assets |
 
 The narration-only radio cut is an early story prototype. It must be reviewed before spending time or quota on expensive visual generation.
 
@@ -135,4 +145,4 @@ The current lightweight checks are:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The current tests use temporary files and fake stages/providers to cover validation-before-generation, deterministic cache keys and invalidation, per-attempt provider logging, bounded retries, secret-safe run logs, and draft subtitle timing. Future FFmpeg command tests should avoid requiring media generation or paid model calls. Actual hosted provider smoke tests and media inspection will be recorded separately and run only after service access, terms, and costs are checked.
+The current tests use temporary files and fake stages/providers/tools to cover validation-before-generation, deterministic cache keys and invalidation, per-attempt provider logging, bounded retries, secret-safe run logs, subtitle validation, assembly command construction, overwrite protection, and final-output checks. Actual FFmpeg execution, media inspection, hosted provider tests, and Amharic quality checks remain pending and require the tools, assets, terms, and human review to be available.
