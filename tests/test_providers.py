@@ -17,14 +17,16 @@ from pipeline.providers import (
 
 
 class FakeImageProvider:
+    def __init__(self) -> None:
+        self.request: GenerationRequest | None = None
+
     def generate_image(self, request: GenerationRequest) -> GenerationResult:
+        self.request = request
         return GenerationResult(
             provider="test",
             model="fake-image",
             output_path=request.output_path,
             seed=request.seed,
-            parameters=request.parameters,
-            latency_ms=12,
         )
 
 
@@ -35,8 +37,6 @@ class FakeMusicProvider:
             model="fake-music",
             output_path=request.output_path,
             seed=request.seed,
-            parameters=request.parameters,
-            latency_ms=15,
         )
 
 
@@ -54,9 +54,9 @@ class TestProviderContracts(unittest.TestCase):
         self.assertIsInstance(provider, ImageGenerationProvider)
         result = provider.generate_image(request)
 
+        self.assertEqual(provider.request, request)
         self.assertEqual(result.output_path, request.output_path)
         self.assertEqual(result.seed, request.seed)
-        self.assertEqual(result.parameters, request.parameters)
         self.assertIsNone(result.cost)
         self.assertIsNone(result.currency)
 

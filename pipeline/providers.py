@@ -31,11 +31,21 @@ class GenerationResult:
     model: str
     output_path: Path
     seed: int | None
-    parameters: Mapping[str, object]
-    latency_ms: float
     cost: float | None = None
     currency: str | None = None
     cost_basis: str | None = None
+
+
+class ProviderError(RuntimeError):
+    """Base class for errors raised by a concrete provider adapter."""
+
+
+class ProviderRateLimitError(ProviderError):
+    """The provider rejected the request because of a rate or quota limit."""
+
+
+class ProviderTimeoutError(ProviderError):
+    """The provider request timed out and may be safe to retry."""
 
 
 @runtime_checkable
