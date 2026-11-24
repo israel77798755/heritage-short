@@ -12,10 +12,11 @@ This log records actual problems encountered while building or running the proje
 ### FFmpeg tools were not found on the laptop PATH
 
 - **Observed:** A PowerShell preflight on 2026-11-24 did not find `ffmpeg` or `ffprobe` on `PATH`.
+- **Rechecked:** On 2026-11-25, `Get-Command ffmpeg` and `Get-Command ffprobe` still returned no executable.
 - **Impact:** Local assembly and media probing cannot be assumed available.
 - **Attempts:** No installation or download was attempted.
-- **Resolution:** None yet. Recheck tool availability before assembly. Prefer a hosted environment if suitable; ask before installing software on the laptop.
-- **Status:** Open; this observation should be rechecked because the environment may have changed.
+- **Resolution:** None yet. `pipeline/media_preflight.py` now reports missing tools before asset probing. The command builders are tested with fakes, but no real assembly was run. Prefer a hosted environment if suitable; ask before installing software on the laptop.
+- **Status:** Open; both tools remain unavailable on PATH as of 2026-11-25.
 
 ## Failure entry template
 
