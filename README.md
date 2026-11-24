@@ -50,6 +50,7 @@ heritage-short/
 │   ├── __init__.py
 │   ├── assembly.py
 │   ├── cache.py
+│   ├── cli.py
 │   ├── config.py
 │   ├── media_preflight.py
 │   ├── orchestrator.py
@@ -63,6 +64,7 @@ heritage-short/
 └── tests/
     ├── test_assembly.py
     ├── test_cache.py
+    ├── test_cli.py
     ├── test_media_preflight.py
     ├── test_orchestrator.py
     ├── test_provider_runner.py
@@ -113,6 +115,26 @@ From the project root, use the project virtual environment:
 ```
 
 The first command validates `storyboard.json` against `schema/storyboard.schema.json` and the film rules. The unit tests cover valid and invalid storyboards, including scene count, timing, Amharic narration, subtitles, lesson coverage, and pre-generation validation. The final command checks that the storyboard is valid JSON syntax.
+
+## Assembly preflight and rendering
+
+The assembly CLI has two explicit commands. It does not call AI providers or generate assets. Both commands require an existing font file; before a real render, verify that the font is licensed for this use and supports Amharic text.
+
+Run an offline preflight after the inputs are prepared:
+
+```powershell
+.\.venv\Scripts\python.exe -m pipeline.cli preflight --font 'C:\path\to\licensed-font.ttf'
+```
+
+By default, the CLI looks for each shot first at `outputs\assets\moving_shots\shot-NN.mp4`, then falls back to `outputs\assets\keyframes\shot-NN.png`. It also requires `outputs\audio\narration.wav`, `outputs\audio\music.wav`, and `outputs\subtitles\en.srt`. The output directory defaults to `outputs\production`. Paths and FFmpeg executable locations can be overridden with the command's `--help` options.
+
+Only after preflight succeeds and the media/tools are approved and available, render the radio cut and both aspect ratios:
+
+```powershell
+.\.venv\Scripts\python.exe -m pipeline.cli render --font 'C:\path\to\licensed-font.ttf'
+```
+
+Rendering uses FFmpeg locally for assembly only, never for heavy AI generation. It refuses to overwrite existing outputs. CLI and assembly tests use mocked media tools and temporary fixtures; they do not prove that a real FFmpeg render or Amharic text shaping works. Neither preflight on production assets nor a real render has been performed yet.
 
 ## Ethics and AI transparency
 

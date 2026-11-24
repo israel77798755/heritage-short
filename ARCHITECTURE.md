@@ -42,6 +42,9 @@ pipeline/media_preflight.py
 
 pipeline/assembly.py
   radio cut, still-image motion fallback, and two-ratio FFmpeg commands
+
+pipeline/cli.py
+  offline assembly preflight and explicit radio/video rendering commands
 ```
 
 `storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover cache, retry, logging, orchestration, subtitle, media preflight, and assembly utilities.
@@ -51,6 +54,12 @@ The protocols in `pipeline/providers.py` define separate text, image, video, mus
 `pipeline/media_preflight.py` checks tool availability, probes every shot/audio input, validates the English SRT and licensed-font file, and prepares writable output directories for both aspect ratios and the radio cut. `pipeline/assembly.py` builds and runs FFmpeg commands for normalized shot clips, a still-image pan/zoom fallback, the narration-only WAV cut, and 9:16 / 16:9 exports. Final exports have selectable English subtitles, a centered disclosure card, music ducking, loudness normalization, and output-stream/duration checks. Existing outputs are never overwritten.
 
 The FFmpeg workflow has only been tested with mocked tools and temporary fake assets. `ffmpeg` and `ffprobe` are absent from the current PATH, so no command has rendered real media. A licensed font with Ethiopic glyph coverage must be supplied, and its shaping behavior still needs an actual render check.
+
+## Assembly CLI
+
+`python -m pipeline.cli preflight --font <font-path>` checks the storyboard, expected shot/audio/subtitle assets, font file, FFmpeg tools, streams, and output directories without rendering. The default inputs are `outputs/assets/moving_shots/shot-NN.mp4` with `outputs/assets/keyframes/shot-NN.png` as a per-shot fallback, `outputs/audio/narration.wav`, `outputs/audio/music.wav`, and `outputs/subtitles/en.srt`.
+
+`python -m pipeline.cli render --font <font-path>` runs preflight first, then creates the narration-only radio cut and both video ratios. It refuses to overwrite existing output files. This interface performs no AI calls; the CLI's command flow is tested with mocks, while actual rendering still requires FFmpeg, prepared assets, and a licensed font with verified Amharic glyph shaping. See [README.md](README.md) for Windows commands and path overrides.
 
 ## Planned production flow
 
