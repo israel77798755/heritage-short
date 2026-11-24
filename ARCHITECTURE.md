@@ -28,6 +28,9 @@ pipeline/keyframes.py
 pipeline/references.py
   provider-injected, cached candidate generation for fictional reference images
 
+pipeline/gemini_image.py
+  explicit Gemini Interactions image API adapter using urllib; no eager calls
+
 pipeline/visual_workflow.py
   validates the storyboard, then executes reference and keyframe stages in order
 
@@ -61,7 +64,7 @@ pipeline/cli.py
 
 `storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover cache, retry, logging, orchestration, subtitle, media preflight, and assembly utilities.
 
-The protocols in `pipeline/providers.py` define separate text, image, video, music, and narration capabilities so an adapter can declare only what its service supports. `pipeline/provider_runner.py` connects an adapter call to bounded retries and `runs.jsonl` logging, verifies that a non-empty output file was created, and records only a prompt hash. No concrete AI provider adapter exists yet, and no real provider call has been made. There are no generated assets, `runs.jsonl`, or final exports in the repository yet.
+The protocols in `pipeline/providers.py` define separate text, image, video, music, and narration capabilities so an adapter can declare only what its service supports. `pipeline/provider_runner.py` connects an adapter call to bounded retries and `runs.jsonl` logging, verifies that a non-empty output file was created, and records only a prompt hash. `pipeline/gemini_image.py` is the first concrete adapter; it reads `GEMINI_API_KEY` only when `generate_image()` is called, sends prompts and optional reference images through Google's Interactions API, and reports no seed because that operation does not expose one. It has mocked tests only. No real provider call has been made, and there are no generated assets, `runs.jsonl`, or final exports in the repository.
 
 `pipeline/media_preflight.py` checks tool availability, probes every shot/audio input, validates the English SRT and licensed-font file, and prepares writable output directories for both aspect ratios and the radio cut. `pipeline/assembly.py` builds and runs FFmpeg commands for normalized shot clips, a still-image pan/zoom fallback, the narration-only WAV cut, and 9:16 / 16:9 exports. Final exports have selectable English subtitles, a centered disclosure card, music ducking, loudness normalization, and output-stream/duration checks. Existing outputs are never overwritten.
 
@@ -95,7 +98,7 @@ FFmpeg assembly and validation
       +--> 16:9 export
 ```
 
-Callable, provider-injected reference-image and keyframe generation functions are implemented and registered in `pipeline/visual_workflow.py`, which validates the storyboard before any provider call. No concrete provider adapter is selected and the workflow has not been run against a service. Video, music, and narration generation remain unimplemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
+Callable, provider-injected reference-image and keyframe generation functions are implemented and registered in `pipeline/visual_workflow.py`, which validates the storyboard before any provider call. A Gemini image adapter is implemented but has not been invoked; its model access, price, and data terms must be verified first. Video, music, and narration generation remain unimplemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
 
 ## Stage contracts (planned)
 

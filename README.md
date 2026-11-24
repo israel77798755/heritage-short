@@ -22,13 +22,13 @@ These are storyboard specifications, not claims that a film has already been gen
 
 Story and script development happen before media generation. The planned production stages read the storyboard contract and should validate it before making any generation calls:
 
-1. **Keyframes:** `pipeline.visual_workflow` validates the storyboard, then runs the provider-injected reference and keyframe stages in order. The reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image; review and approve those references manually before using them to create one still per shot. Neither stage has been run with a real provider. Cloudflare Workers AI is listed as a candidate for image generation; availability and terms must be checked before use.
+1. **Keyframes:** `pipeline.visual_workflow` validates the storyboard, then runs the provider-injected reference and keyframe stages in order. `GeminiImageProvider` implements Google's Interactions image API; the current model docs recommend `gemini-nano-banana-2.1`, but account access, pricing, and terms must be checked before any call. The reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image; review and approve those references manually before using them to create one still per shot. No provider call or media generation has occurred.
 2. **Moving shots:** Animate selected keyframes. Wan 2.2 is a candidate for Kaggle or Colab execution.
 3. **Music:** Generate and choose an original instrumental score. ACE-Step is a candidate for Kaggle or Colab execution.
 4. **Narration:** Generate Amharic narration and check pronunciation and pacing. Gemini TTS is a candidate, subject to model availability and free-tier checks.
 5. **Assembly:** Tested command builders prepare a narration-only WAV radio cut and 9:16 / 16:9 video exports. They include an English subtitle track, a disclosure end card, music ducking, loudness normalization, output checks, and a still-image pan/zoom fallback. Real rendering awaits FFmpeg, ffprobe, approved media assets, and a licensed font with Amharic glyph coverage.
 
-The provider-injected reference and keyframe functions use content caching, bounded retries, and per-attempt model-call logging. No concrete provider adapter or complete orchestrated production run exists yet. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. The assembly workflow has command-level tests but has not rendered real outputs. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
+The provider-injected reference and keyframe functions use content caching, bounded retries, and per-attempt model-call logging. The Gemini image adapter is concrete but has not been invoked; a complete production run and video/music/narration adapters remain unimplemented. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. The assembly workflow has command-level tests but has not rendered real outputs. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
 
 ## Current project structure
 
@@ -53,6 +53,7 @@ heritage-short/
 │   ├── cache.py
 │   ├── cli.py
 │   ├── config.py
+│   ├── gemini_image.py
 │   ├── keyframes.py
 │   ├── media_preflight.py
 │   ├── orchestrator.py
@@ -70,6 +71,7 @@ heritage-short/
     ├── test_cached_generation.py
     ├── test_cache.py
     ├── test_cli.py
+    ├── test_gemini_image.py
     ├── test_keyframes.py
     ├── test_media_preflight.py
     ├── test_orchestrator.py
@@ -104,13 +106,17 @@ The copy command leaves an existing `.env` untouched. Do not commit `.env`; `.gi
 
 | Variable | Intended use | Status |
 |---|---|---|
-| `GEMINI_API_KEY` | Candidate Gemini text and Amharic TTS calls | Check current model availability and free-tier limits before use. |
+| `GEMINI_API_KEY` | Explicitly invoked Gemini image adapter; candidate Gemini text and Amharic TTS calls | Only read when a Gemini request is explicitly made. Verify model access, pricing, data terms, and quotas first. |
 | `CLOUDFLARE_ACCOUNT_ID` | Candidate Cloudflare Workers AI image generation | Planned; verify access and limits before use. |
 | `CLOUDFLARE_API_TOKEN` | Authenticate to Cloudflare Workers AI | Planned; keep secret. |
 | `KAGGLE_USERNAME`, `KAGGLE_KEY` | Optional Kaggle notebook access for hosted generation | Optional; keep credentials secret. |
 | `HF_TOKEN` | Optional Hugging Face access | Only needed if a selected service requires it; keep secret. |
 
 Only configure credentials for services actually selected. Never put keys in source files, storyboard prompts, terminal output, screenshots, or `runs.jsonl`. The example file is not a real credential file.
+
+### Gemini image adapter status
+
+`pipeline.gemini_image.GeminiImageProvider` uses Python's standard-library HTTP client and does not create a client or make a request during construction. The API key is read only when `generate_image()` is explicitly called. That call uploads its prompt and any reference images and may incur charges; do not invoke it until model access, pricing, quotas, and Google's data terms are checked and accepted. The API's seed is not exposed, so the call log records a null seed. Google's current image documentation states generated images carry SynthID; preserve that provenance. There is not yet a generation CLI command, and no real call has been made.
 
 ## Validate the storyboard and run tests
 
@@ -160,13 +166,14 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Shared project paths and environment-variable helpers.
 - Content-based cache-key and output-path helpers used by the cache-aware provider-call wrapper.
 - Cache-aware provider-call wrapper integrated into the provider-injected reference and keyframe stages: cache hits skip API calls; cache misses use the logged retry runner.
+- Gemini image adapter using Python's standard-library HTTP client; it is lazy, does not call the API on construction, and has mocked tests only.
 - Provider-injected keyframe stage that combines storyboard style and shot prompts with Almaz, Dawit, and visual-style reference images; fake-provider tests verify cache reuse. It has not been run with a real provider or media.
 - Provider-injected, cached generation of candidate Almaz, Dawit, and visual-style reference images. These are not generated yet and require human review before use.
-- Bounded retry helper for caller-classified transient errors (not yet connected to providers).
+- Bounded retry helper used by the provider-call runner; Gemini rate limits and timeouts are classified for retry. No live provider calls have occurred.
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
 - Validation-gated visual workflow that runs reference generation before keyframes and stops before provider calls when storyboard validation fails.
 - Reference/keyframe stages are registered in the visual workflow; moving shots, music, and narration remain unregistered.
-- Provider-neutral text, image, video, music, and narration capability contracts; no concrete provider adapter is implemented.
+- Provider-neutral text, image, video, music, and narration capability contracts; Gemini image is the only concrete adapter, while text/video/music/narration adapters remain unimplemented.
 - Provider-call runner with bounded retries, output-file checks, prompt-hash logging, and per-attempt run records; no real provider calls have occurred.
 - Draft English SRT generation from storyboard shot durations (not final narration sync).
 - Assembly preflight checks FFmpeg/ffprobe paths, media streams, SRT timing, font-file presence, and writable output directories.
@@ -178,9 +185,8 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 ### Still to do
 
 - Have an Amharic speaker review narration, subtitles, and pronunciation guidance.
-- Implement concrete provider adapters and complete script/story and production-stage orchestration.
-- Select an image provider and review its terms/free-tier limits; create and approve the three reference images, then generate/review keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
-- Add concrete provider adapters and register the callable reference/keyframe stages in a validation-gated production workflow; real provider calls remain pending.
+- Verify Gemini image model access, pricing, and data terms; create and approve the three reference images, then generate/review keyframes. No media has been generated yet.
+- Implement video, music, and narration adapters and complete script/story and production-stage orchestration; real provider calls remain pending.
 - Once FFmpeg/ffprobe and approved assets are available, run preflight and render/inspect the radio cut and both aspect ratios; command-level tests are not a substitute for media inspection.
 - Provide and verify the license and Amharic glyph/shaping of the end-card font before rendering.
 - Conduct both audience tests with at least three people each; neither test has happened yet.

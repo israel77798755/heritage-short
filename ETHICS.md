@@ -86,6 +86,7 @@ Every model, tool, and asset used in this project must have its license verified
 |---|---|---|---|---|
 | Gemini 3.8 Flash | Script, prompts, translation | Google AI Terms of Service | Subject to ToS | ⏳ To verify before first API call |
 | Gemini 3.8 Flash TTS | Possible narration candidate | Google AI Terms of Service | Subject to ToS | ⏳ Amharic support, service terms, and quota still need verification |
+| Gemini Nano Banana 2.1 | Candidate reference and keyframe image generation; adapter implemented | Google AI Terms of Service | Subject to ToS | ⏳ Verify account access, pricing, data terms, and quotas before any request |
 | FLUX.1 schnell / FLUX.2 klein 4B | Keyframe image generation | Apache 2.0 (4B variant) | Yes (Apache 2.0) | ⏳ To verify before first API call |
 | Wan 2.2 TI2V-5B | Image-to-video generation | Apache 2.0 | Yes | ⏳ To verify before first use |
 | ACE-Step 1.5 | Original music generation | MIT | Yes | ⏳ To verify before first use |
@@ -99,6 +100,8 @@ Every model, tool, and asset used in this project must have its license verified
 - No third-party copyrighted music, stock footage, or stock images have been added to the project so far.
 - An original score using ACE-Step 1.5 is planned; no score has been generated or selected.
 - Before using generated outputs, record the exact model/version, applicable service terms, and any required attribution or provenance.
+- Google's [Gemini image-generation documentation](https://ai.google.dev/gemini-api/docs/image-generation) currently recommends Gemini Nano Banana 2.1 and states generated images include SynthID. The adapter is implemented but has not made an API request.
+- Google's [Gemini API pricing page](https://ai.google.dev/gemini-api/docs/pricing) says Free-tier content may be used to improve Google products; Paid-tier content is not used for that purpose. This project has not verified free access or pricing for the selected image model. Do not send project prompts or reference images until the applicable terms and cost are checked and accepted.
 - No font has been selected for the final export. Verify its license before use.
 - Google’s [Gemini 3.8 Flash TTS model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash-tts) lists free-tier text and audio pricing as free of charge, and marks free-tier content as used to improve Google products. Actual quota, Amharic support, and applicable terms have not been verified for this project. No Gemini request has been made; paid API use still requires explicit approval.
 
@@ -159,7 +162,7 @@ The following table describes intended use, not completed calls or outputs.
 |-------|------------------|------------------|------------|--------|
 | Story and script | Possible drafting assistance | Gemini text model | Author reviews, edits, and approves narrative content | Planned; no model call recorded |
 | Storyboard and prompts | Possible drafting assistance | Gemini text model | Author designs shot structure and reviews prompts | Planned; no model call recorded |
-| Keyframe images | Generate reference and shot images | Hosted image model; candidate listed in Section 4.2 | Author selects, reviews, and approves each image | Planned; no images generated |
+| Keyframe images | Generate reference and shot images | Gemini image adapter implemented; model and terms pending verification | Author selects, reviews, and approves each image | Planned; no images generated or API calls made |
 | Moving shots (video) | Animate approved keyframes | Wan 2.2 on Kaggle/Colab is a candidate | Author reviews each clip and decides keep/regenerate | Planned; no video generated |
 | Narration | Generate Amharic narration | Gemini TTS is a candidate | Author and Amharic speaker review pronunciation and pacing | Planned; no narration generated |
 | Music | Generate original score candidates | ACE-Step 1.5 on Kaggle/Colab is a candidate | Author listens to candidates and selects the best fit | Planned; no score generated |
@@ -196,3 +199,4 @@ Results will be documented honestly in `DESIGN.md` when the tests are conducted.
 | Date | Change |
 |------|--------|
 | 2026-11-25 | Initial ethics document created with fictional characters, consent policy, AI disclosure plan, licensing table, cultural respect commitments, privacy rules, transparency matrix, and audience testing ethics. |
+| 2026-11-25 | Documented the Gemini image adapter and pending model access, pricing, data terms, and reference-image review. |
