@@ -28,6 +28,9 @@ pipeline/keyframes.py
 pipeline/references.py
   provider-injected, cached candidate generation for fictional reference images
 
+pipeline/visual_workflow.py
+  validates the storyboard, then executes reference and keyframe stages in order
+
 pipeline/retry.py
   bounded retries for explicitly classified transient errors
 
@@ -92,7 +95,7 @@ FFmpeg assembly and validation
       +--> 16:9 export
 ```
 
-Callable, provider-injected reference-image and keyframe generation functions are implemented, but no concrete provider adapter is selected and neither function has been run against a service. Video, music, and narration generation remain unimplemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
+Callable, provider-injected reference-image and keyframe generation functions are implemented and registered in `pipeline/visual_workflow.py`, which validates the storyboard before any provider call. No concrete provider adapter is selected and the workflow has not been run against a service. Video, music, and narration generation remain unimplemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
 
 ## Stage contracts (planned)
 

@@ -22,7 +22,7 @@ These are storyboard specifications, not claims that a film has already been gen
 
 Story and script development happen before media generation. The planned production stages read the storyboard contract and should validate it before making any generation calls:
 
-1. **Keyframes:** The provider-injected reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image; review and approve those references manually before using the provider-injected keyframe stage to create one still per shot. Neither stage has been run with a real provider. Cloudflare Workers AI is listed as a candidate for image generation; availability and terms must be checked before use.
+1. **Keyframes:** `pipeline.visual_workflow` validates the storyboard, then runs the provider-injected reference and keyframe stages in order. The reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image; review and approve those references manually before using them to create one still per shot. Neither stage has been run with a real provider. Cloudflare Workers AI is listed as a candidate for image generation; availability and terms must be checked before use.
 2. **Moving shots:** Animate selected keyframes. Wan 2.2 is a candidate for Kaggle or Colab execution.
 3. **Music:** Generate and choose an original instrumental score. ACE-Step is a candidate for Kaggle or Colab execution.
 4. **Narration:** Generate Amharic narration and check pronunciation and pacing. Gemini TTS is a candidate, subject to model availability and free-tier checks.
@@ -61,7 +61,8 @@ heritage-short/
 │   ├── references.py
 │   ├── retry.py
 │   ├── runlog.py
-│   └── subtitles.py
+│   ├── subtitles.py
+│   └── visual_workflow.py
 ├── schema/
 │   └── storyboard.schema.json
 └── tests/
@@ -77,7 +78,8 @@ heritage-short/
     ├── test_retry.py
     ├── test_runlog.py
     ├── test_subtitles.py
-    └── test_validate_storyboard.py
+    ├── test_validate_storyboard.py
+    └── test_visual_workflow.py
 ```
 
 `.venv/`, Python cache folders, generated outputs, and local secrets are not listed as source files. The ignore rules exclude `.venv/`, Python caches, and `.env`.
@@ -162,7 +164,8 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Provider-injected, cached generation of candidate Almaz, Dawit, and visual-style reference images. These are not generated yet and require human review before use.
 - Bounded retry helper for caller-classified transient errors (not yet connected to providers).
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
-- Validation-gated stage orchestrator (no production stages are registered yet).
+- Validation-gated visual workflow that runs reference generation before keyframes and stops before provider calls when storyboard validation fails.
+- Reference/keyframe stages are registered in the visual workflow; moving shots, music, and narration remain unregistered.
 - Provider-neutral text, image, video, music, and narration capability contracts; no concrete provider adapter is implemented.
 - Provider-call runner with bounded retries, output-file checks, prompt-hash logging, and per-attempt run records; no real provider calls have occurred.
 - Draft English SRT generation from storyboard shot durations (not final narration sync).
