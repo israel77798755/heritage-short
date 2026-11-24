@@ -5,12 +5,16 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from pipeline.keyframes import KeyframeReferences
 from pipeline.providers import GenerationRequest, GenerationResult
-from pipeline.visual_workflow import run_visual_workflow
+from pipeline.visual_workflow import (
+    ReferenceApprovalRequiredError,
+    run_visual_workflow,
+)
 from validate_storyboard import SCHEMA_PATH, STORYBOARD_PATH, StoryboardValidationError
 
 
@@ -48,7 +52,13 @@ class TestVisualWorkflow(unittest.TestCase):
             encoding="utf-8",
         )
 
-    def _run(self, provider: FakeImageProvider) -> dict[str, Any]:
+    def _run(
+        self,
+        provider: FakeImageProvider,
+        approve_references: Callable[[KeyframeReferences], bool] = (
+            lambda _references: True
+        ),
+    ) -> dict[str, Any]:
         return run_visual_workflow(
             provider,
             provider_name="fake-image-provider",
@@ -57,15 +67,26 @@ class TestVisualWorkflow(unittest.TestCase):
             schema_path=SCHEMA_PATH,
             outputs_dir=self.outputs_dir,
             log_path=self.log_path,
+            approve_references=approve_references,
         )
 
     def test_runs_reference_stage_before_all_keyframes(self) -> None:
         provider = FakeImageProvider()
+        reviewed_references: list[KeyframeReferences] = []
 
-        results = self._run(provider)
+        def approve_references(references: KeyframeReferences) -> bool:
+            reviewed_references.append(references)
+            return True
 
-        self.assertEqual(list(results), ["references", "keyframes"])
+        results = self._run(provider, approve_references)
+
+        self.assertEqual(
+            list(results),
+            ["references", "approved_references", "keyframes"],
+        )
         self.assertIsInstance(results["references"], KeyframeReferences)
+        self.assertEqual(reviewed_references, [results["references"]])
+        self.assertIs(results["approved_references"], results["references"])
         self.assertEqual(list(results["keyframes"]), list(range(1, 11)))
         self.assertEqual(len(provider.requests), 13)
         self.assertEqual(
@@ -76,6 +97,29 @@ class TestVisualWorkflow(unittest.TestCase):
             [request.seed for request in provider.requests[3:]],
             list(range(1001, 1011)),
         )
+
+    def test_unapproved_references_stop_before_keyframe_generation(self) -> None:
+        provider = FakeImageProvider()
+        reviewed_references: list[KeyframeReferences] = []
+
+        def reject_references(references: KeyframeReferences) -> bool:
+            reviewed_references.append(references)
+            return False
+
+        with self.assertRaises(ReferenceApprovalRequiredError):
+            self._run(provider, reject_references)
+
+        self.assertEqual(len(reviewed_references), 1)
+        self.assertEqual(len(provider.requests), 3)
+        self.assertFalse(any(request.reference_paths for request in provider.requests))
+
+    def test_invalid_approval_callback_stops_before_provider_calls(self) -> None:
+        provider = FakeImageProvider()
+
+        with self.assertRaisesRegex(TypeError, "must be callable"):
+            self._run(provider, None)
+
+        self.assertEqual(provider.requests, [])
 
     def test_invalid_storyboard_prevents_every_provider_call(self) -> None:
         self.storyboard["scenes"][0]["subtitle_en"] = ""
