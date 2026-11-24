@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import tempfile
 import unittest
@@ -11,6 +12,7 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.error import HTTPError
 
+from pipeline.cached_generation import run_cached_generation_call
 from pipeline.gemini_image import GeminiImageProvider
 from pipeline.providers import (
     GenerationRequest,
@@ -118,6 +120,62 @@ class TestGeminiImageProvider(unittest.TestCase):
                     )
                 )
         post.assert_not_called()
+
+    def test_cached_call_logs_metadata_once_without_prompt_or_key(self) -> None:
+        log_path = self.root / "runs.jsonl"
+        request = GenerationRequest(
+            prompt="A private fictional scene",
+            output_path=self.root / "shot.png",
+            seed=17,
+        )
+
+        with patch(
+            "pipeline.gemini_image.urlopen",
+            return_value=FakeResponse(self._response()),
+        ) as post:
+            first = run_cached_generation_call(
+                self.provider.generate_image,
+                request,
+                provider="gemini",
+                model="gemini-nano-banana-2.1",
+                stage="keyframes",
+                outputs_dir=self.root / "outputs",
+                log_path=log_path,
+                sleep=lambda _delay: None,
+            )
+            second = run_cached_generation_call(
+                self.provider.generate_image,
+                request,
+                provider="gemini",
+                model="gemini-nano-banana-2.1",
+                stage="keyframes",
+                outputs_dir=self.root / "outputs",
+                log_path=log_path,
+                sleep=lambda _delay: None,
+            )
+
+        records = [
+            json.loads(line)
+            for line in log_path.read_text(encoding="utf-8").splitlines()
+        ]
+        self.assertFalse(first.cache_hit)
+        self.assertTrue(second.cache_hit)
+        self.assertEqual(first.cache_key, second.cache_key)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["provider"], "gemini")
+        self.assertEqual(records[0]["model"], "gemini-nano-banana-2.1")
+        self.assertIsNone(records[0]["seed"])
+        self.assertIsNone(records[0]["cost"])
+        self.assertEqual(records[0]["status"], "succeeded")
+        prompt_hash = hashlib.sha256(request.prompt.encode("utf-8")).hexdigest()
+        self.assertEqual(
+            records[0]["parameters"]["prompt_sha256"],
+            prompt_hash,
+        )
+        log_contents = log_path.read_text(encoding="utf-8")
+        self.assertNotIn(request.prompt, log_contents)
+        self.assertNotIn("test-key", log_contents)
+        post.assert_called_once()
 
     def test_non_png_image_response_is_rejected(self) -> None:
         body = json.dumps(
