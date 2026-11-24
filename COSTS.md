@@ -21,7 +21,7 @@ These are candidate stages and providers from the project plan, not completed ru
 
 ## Public pricing reference (not project usage)
 
-The official [Gemini 3.8 Flash TTS model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash-tts), checked 2026-11-25, lists free-tier text and audio pricing as free of charge. It also lists standard paid pricing of $0.50 per million text input tokens and $9.00 per million audio output tokens through 2026-12-31, equivalent to $0.00225 per 10 seconds of generated audio. The listed rates change on 2027-01-01. This is a public reference only: no API request or charge has occurred, actual account quota is unverified, Amharic support is unverified, and paid use is not authorized.
+No current provider price is verified in this ledger. Before any future request, check the selected model's official pricing, account access, quota, and data terms; record a dated source and calculation here only after verifying them. No paid request is authorized.
 
 ## How to record a future run
 
@@ -33,4 +33,4 @@ For each real run, record:
 - Actual billed amount, currency, and source (provider usage record or invoice).
 - A list-price equivalent only when the official price and calculation are documented; otherwise use `not verified`.
 
-The run logger should write the per-call evidence to `runs.jsonl`; this document should summarize those records. Do not record API keys, authorization headers, or other credentials here or in the run log. Do not claim savings from caching until the inputs and avoided calls have been measured.
+`pipeline/provider_runner.py` records each attempted provider call through `pipeline/runlog.py`. No provider call has been made, so `runs.jsonl` is not present; summarize its actual records here after real calls occur. Do not record API keys, authorization headers, or other credentials here or in the run log. Do not claim savings from caching until the inputs and avoided calls have been measured.
