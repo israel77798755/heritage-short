@@ -22,13 +22,13 @@ These are storyboard specifications, not claims that a film has already been gen
 
 Story and script development happen before media generation. The planned production stages read the storyboard contract and should validate it before making any generation calls:
 
-1. **Keyframes:** Create and review Almaz, Dawit, and visual-style reference images, then use the provider-injected keyframe stage to create one still per shot. Reference-image creation is not implemented. Cloudflare Workers AI is listed as a candidate for image generation; availability and terms must be checked before use.
+1. **Keyframes:** The provider-injected reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image; review and approve those references manually before using the provider-injected keyframe stage to create one still per shot. Neither stage has been run with a real provider. Cloudflare Workers AI is listed as a candidate for image generation; availability and terms must be checked before use.
 2. **Moving shots:** Animate selected keyframes. Wan 2.2 is a candidate for Kaggle or Colab execution.
 3. **Music:** Generate and choose an original instrumental score. ACE-Step is a candidate for Kaggle or Colab execution.
 4. **Narration:** Generate Amharic narration and check pronunciation and pacing. Gemini TTS is a candidate, subject to model availability and free-tier checks.
 5. **Assembly:** Tested command builders prepare a narration-only WAV radio cut and 9:16 / 16:9 video exports. They include an English subtitle track, a disclosure end card, music ducking, loudness normalization, output checks, and a still-image pan/zoom fallback. Real rendering awaits FFmpeg, ffprobe, approved media assets, and a licensed font with Amharic glyph coverage.
 
-The cache, bounded-retry, model-call logging, and validation-gated orchestration helpers exist, but no provider stage uses them yet. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. The assembly workflow has command-level tests but has not rendered real outputs. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
+The provider-injected reference and keyframe functions use content caching, bounded retries, and per-attempt model-call logging. No concrete provider adapter or complete orchestrated production run exists yet. The SRT writer creates draft timing from shot durations; it is not synchronized to generated narration. The assembly workflow has command-level tests but has not rendered real outputs. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not a local laptop.
 
 ## Current project structure
 
@@ -58,6 +58,7 @@ heritage-short/
 │   ├── orchestrator.py
 │   ├── provider_runner.py
 │   ├── providers.py
+│   ├── references.py
 │   ├── retry.py
 │   ├── runlog.py
 │   └── subtitles.py
@@ -72,6 +73,7 @@ heritage-short/
     ├── test_media_preflight.py
     ├── test_orchestrator.py
     ├── test_provider_runner.py
+    ├── test_references.py
     ├── test_retry.py
     ├── test_runlog.py
     ├── test_subtitles.py
@@ -154,9 +156,10 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - A JSON Schema and Python validator with semantic checks.
 - Unit tests for storyboard validation and the helper modules listed below.
 - Shared project paths and environment-variable helpers.
-- Content-based cache-key and output-path helpers used by the new cache-aware call wrapper (production-stage integration remains pending).
-- Cache-aware provider-call wrapper: cache hits skip API calls and miss calls use the logged retry runner; production stages do not use it yet.
+- Content-based cache-key and output-path helpers used by the cache-aware provider-call wrapper.
+- Cache-aware provider-call wrapper integrated into the provider-injected reference and keyframe stages: cache hits skip API calls; cache misses use the logged retry runner.
 - Provider-injected keyframe stage that combines storyboard style and shot prompts with Almaz, Dawit, and visual-style reference images; fake-provider tests verify cache reuse. It has not been run with a real provider or media.
+- Provider-injected, cached generation of candidate Almaz, Dawit, and visual-style reference images. These are not generated yet and require human review before use.
 - Bounded retry helper for caller-classified transient errors (not yet connected to providers).
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
 - Validation-gated stage orchestrator (no production stages are registered yet).
@@ -173,8 +176,8 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 
 - Have an Amharic speaker review narration, subtitles, and pronunciation guidance.
 - Implement concrete provider adapters and complete script/story and production-stage orchestration.
-- Create and review the three approved reference images, then generate/review keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
-- Connect the cache-aware wrapper and concrete provider adapters to production stages; real provider calls remain pending.
+- Select an image provider and review its terms/free-tier limits; create and approve the three reference images, then generate/review keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
+- Add concrete provider adapters and register the callable reference/keyframe stages in a validation-gated production workflow; real provider calls remain pending.
 - Once FFmpeg/ffprobe and approved assets are available, run preflight and render/inspect the radio cut and both aspect ratios; command-level tests are not a substitute for media inspection.
 - Provide and verify the license and Amharic glyph/shaping of the end-card font before rendering.
 - Conduct both audience tests with at least three people each; neither test has happened yet.
