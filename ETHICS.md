@@ -2,6 +2,8 @@
 
 This document records the ethical commitments, consent status, licensing, and cultural considerations for this project. It is a living document updated as the project progresses.
 
+**Status note (2026-11-25):** No production model calls or media generation have been recorded in the repository. Planned tools and stages below must not be read as completed work.
+
 ---
 
 ## 1. Fictional Characters
@@ -91,12 +93,13 @@ Every model, tool, and asset used in this project must have its license verified
 | jsonschema (Python) | Storyboard validation | MIT | Yes | ✅ Verified |
 | python-dotenv | Environment variable loading | BSD-3-Clause | Yes | ✅ Verified |
 
-### 4.3 Generated Output Ownership
+### 4.3 Generated Output Terms
 
-- AI-generated images, video, narration, and music are produced by the tools listed above under their respective output terms.
-- No third-party copyrighted music, stock footage, or stock images are used.
-- All music is originally generated for this project using ACE-Step 1.5.
-- No copyrighted fonts are used without verifying their license.
+- No generated images, video, narration, or music are currently recorded in the repository, so no output ownership or output-license claim is made yet.
+- No third-party copyrighted music, stock footage, or stock images have been added to the project so far.
+- An original score using ACE-Step 1.5 is planned; no score has been generated or selected.
+- Before using generated outputs, record the exact model/version, applicable service terms, and any required attribution or provenance.
+- No font has been selected for the final export. Verify its license before use.
 
 ### 4.4 Fonts
 
@@ -147,20 +150,22 @@ This film portrays a fictional Ethiopian mother and child in an Ethiopian highla
 
 ---
 
-## 7. Transparency — AI Usage by Production Stage
+## 7. Planned AI Use by Production Stage
 
-| Stage | AI-assisted? | Tool(s) | Human role |
-|-------|-------------|---------|------------|
-| Story and script | Yes | Gemini Flash | Author reviews, edits, and approves all narrative content |
-| Storyboard and prompts | Yes | Gemini Flash | Author designs shot structure and reviews all prompts |
-| Keyframe images | Yes | FLUX (Cloudflare Workers AI) | Author selects, reviews, and approves each image |
-| Moving shots (video) | Yes | Wan 2.2 (Kaggle) | Author reviews each clip and decides keep/regenerate |
-| Narration | Yes | Gemini TTS | Author reviews pronunciation and pacing |
-| Music | Yes | ACE-Step 1.5 (Kaggle) | Author listens to candidates and selects the best fit |
-| Video assembly | No | FFmpeg | Author controls timing, mixing, subtitles, and export |
-| Subtitles | Partial | Gemini Flash for translation review | Author writes and verifies subtitle text |
-| Validation and testing | No | Python scripts | Automated checks with human review |
-| Documentation | No | Written by author | — |
+The following table describes intended use, not completed calls or outputs.
+
+| Stage | Intended AI use | Candidate tool(s) | Human role | Status |
+|-------|------------------|------------------|------------|--------|
+| Story and script | Possible drafting assistance | Gemini text model | Author reviews, edits, and approves narrative content | Planned; no model call recorded |
+| Storyboard and prompts | Possible drafting assistance | Gemini text model | Author designs shot structure and reviews prompts | Planned; no model call recorded |
+| Keyframe images | Generate reference and shot images | Hosted image model; candidate listed in Section 4.2 | Author selects, reviews, and approves each image | Planned; no images generated |
+| Moving shots (video) | Animate approved keyframes | Wan 2.2 on Kaggle/Colab is a candidate | Author reviews each clip and decides keep/regenerate | Planned; no video generated |
+| Narration | Generate Amharic narration | Gemini TTS is a candidate | Author and Amharic speaker review pronunciation and pacing | Planned; no narration generated |
+| Music | Generate original score candidates | ACE-Step 1.5 on Kaggle/Colab is a candidate | Author listens to candidates and selects the best fit | Planned; no score generated |
+| Video assembly | No generative model intended | FFmpeg | Author controls timing, mixing, subtitles, and export | Planned; no assembly performed |
+| Subtitles | Possible translation assistance | Gemini text model, if selected | Author and Amharic speaker verify subtitle text | Planned; no subtitle review recorded |
+| Validation and testing | No generative model intended | Python scripts | Automated checks with human review | Storyboard validation and unit tests exist |
+| Documentation | No generative model intended | Written and reviewed by the author | Author verifies claims against repository evidence | In progress |
 
 ---
 
