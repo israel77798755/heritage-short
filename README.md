@@ -24,7 +24,7 @@ These are storyboard specifications, not claims that a film has already been gen
 
 Story and script development happen before media generation. The planned production stages read the storyboard contract and should validate it before making any generation calls:
 
-1. **Keyframes:** `pipeline.visual_workflow` validates the storyboard, then runs the provider-injected reference and keyframe stages in order. `GeminiImageProvider` implements Google's Interactions image API; the current model docs recommend `gemini-nano-banana-2.1`, but account access, pricing, and terms must be checked before any call. The reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image; review and approve those references manually before using them to create one still per shot. No provider call or media generation has occurred.
+1. **Keyframes:** `pipeline.visual_workflow` validates the storyboard and generates reference candidates. Its approval callback must explicitly return `True` after human review before keyframe requests can run. `GeminiImageProvider` implements Google's Interactions image API; the current model docs recommend `gemini-nano-banana-2.1`, but account access, pricing, and terms must be checked before any call. The reference stage can create candidate portraits of Almaz and Dawit plus a visual-style image. No provider call or media generation has occurred.
 2. **Moving shots:** Animate selected keyframes. Wan 2.2 is a candidate for Kaggle or Colab execution.
 3. **Music:** Generate and choose an original instrumental score. ACE-Step is a candidate for Kaggle or Colab execution.
 4. **Narration:** Generate Amharic narration and check pronunciation and pacing. Gemini TTS is a candidate, subject to model availability and free-tier checks.
@@ -174,7 +174,7 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Provider-injected, cached generation of candidate Almaz, Dawit, and visual-style reference images. These are not generated yet and require human review before use.
 - Bounded retry helper used by the provider-call runner; Gemini rate limits and timeouts are classified for retry. No live provider calls have occurred.
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
-- Validation-gated visual workflow that runs reference generation before keyframes and stops before provider calls when storyboard validation fails.
+- Validation-gated visual workflow that stops on invalid storyboards and requires explicit approval of reference candidates before keyframe generation.
 - Reference/keyframe stages are registered in the visual workflow; moving shots, music, and narration remain unregistered.
 - Provider-neutral text, image, video, music, and narration capability contracts; Gemini image is the only concrete adapter, while text/video/music/narration adapters remain unimplemented.
 - Provider-call runner with bounded retries, output-file checks, prompt-hash logging, and per-attempt run records; no real provider calls have occurred.

@@ -20,7 +20,7 @@ subtitles, a warm cinematic style, and 9:16 and 16:9 exports.
   package for full schema validation when available.
 - The Python foundation includes cache-aware provider calls, bounded retries,
   redacted JSONL run logging, provider interfaces, and a validation-gated
-  reference/keyframe workflow.
+  reference/keyframe workflow that requires reference approval before keyframes.
 - A lazy Gemini image adapter is implemented using Python's standard-library
   HTTP client. It supports prompt and reference-image inputs, validates PNG
   responses, avoids overwriting existing outputs, and maps rate limits and
@@ -33,7 +33,7 @@ subtitles, a warm cinematic style, and 9:16 and 16:9 exports.
 
 ## Verification
 
-The latest full local test run completed with **94 tests passing**. The
+The latest full local test run completed with **96 tests passing**. The
 storyboard validator reports ten scenes, 75 seconds of story, and a three-second
 end card (78 seconds total). These tests use mocked providers and media tools;
 they do not establish that a real API call or video render works.

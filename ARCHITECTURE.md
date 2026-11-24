@@ -32,7 +32,8 @@ pipeline/gemini_image.py
   explicit Gemini Interactions image API adapter using urllib; no eager calls
 
 pipeline/visual_workflow.py
-  validates the storyboard, then executes reference and keyframe stages in order
+  validates the storyboard, generates reference candidates, and gates keyframes
+  on an explicit approval callback
 
 pipeline/retry.py
   bounded retries for explicitly classified transient errors
@@ -86,7 +87,13 @@ story and script
       v
 validate storyboard (required gate)
       |
-      +--> keyframes and character/style references
+      +--> character/style reference candidates
+             |
+             v
+          explicit human approval
+             |
+             v
+          keyframes
       +--> moving shots
       +--> original music
       +--> Amharic narration and English subtitles
@@ -98,7 +105,7 @@ FFmpeg assembly and validation
       +--> 16:9 export
 ```
 
-Callable, provider-injected reference-image and keyframe generation functions are implemented and registered in `pipeline/visual_workflow.py`, which validates the storyboard before any provider call. A Gemini image adapter is implemented but has not been invoked; its model access, price, and data terms must be verified first. Video, music, and narration generation remain unimplemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
+Callable, provider-injected reference-image and keyframe generation functions are implemented in `pipeline/visual_workflow.py`, which validates the storyboard before any provider call and requires an approval callback to explicitly approve reference candidates before keyframe generation. Tests cover both approval and rejection; an actual human review has not occurred. A Gemini image adapter is implemented but has not been invoked; its model access, price, and data terms must be verified first. Video, music, and narration generation remain unimplemented. Candidate providers and hosted execution environments are described in [README.md](README.md) and tracked for consent, transparency, and licensing in [ETHICS.md](ETHICS.md). Provider availability, free-tier limits, terms, and Amharic quality must be checked before using a service. Heavy image, video, and music generation is intended for hosted services or Kaggle/Colab, not the laptop.
 
 ## Stage contracts (planned)
 
@@ -106,7 +113,7 @@ Each stage will read the validated storyboard and write assets or metadata under
 
 | Stage | Inputs from the storyboard | Planned outputs | Status |
 |---|---|---|---|
-| Keyframes | Validated storyboard, human-reviewed Almaz/Dawit/style reference images, shot seeds | Three cached reference candidates and one cached still per shot | Provider-injected reference and keyframe functions are implemented and fake-tested; real provider execution and human reference review are pending |
+| Keyframes | Validated storyboard, approved Almaz/Dawit/style reference images, shot seeds | Three cached reference candidates and one cached still per shot | Provider-injected stages and explicit approval gate are implemented and fake-tested; real provider execution and human reference review are pending |
 | Moving shots | Approved keyframe, motion prompt, duration, seed | Short video clips for selected shots | Not implemented |
 | Music | Instrumental direction, music cues, timing, seed | Candidate score(s) and selected score | Not implemented |
 | Narration and subtitles | Amharic narration, English subtitle text, narration settings | Narration audio and timed subtitle file | Draft SRT writer exists; narration generation and final audio synchronization are not implemented |
