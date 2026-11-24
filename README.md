@@ -90,7 +90,7 @@ heritage-short/
     └── test_visual_workflow.py
 ```
 
-`.venv/`, Python cache folders, generated outputs, and local secrets are not listed as source files. The ignore rules exclude `.venv/`, Python caches, and `.env`.
+`.venv/`, Python cache folders, generated outputs, and local secrets are not listed as source files. The ignore rules exclude `.venv/`, Python caches, `.env`, and `/outputs/` so large or unreviewed generated media are not added accidentally. Intentionally publish a reviewed deliverable separately only after checking its license and provenance.
 
 ## Windows PowerShell setup
 

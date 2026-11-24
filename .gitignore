@@ -16,6 +16,7 @@ env/
 *.tmp
 *.bak
 *.log
+/outputs/
 .DS_Store
 Thumbs.db
 desktop.ini
