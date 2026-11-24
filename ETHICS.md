@@ -1,0 +1,192 @@
+# Ethics — The Wisdom of Our Mothers (የእናቶቻችን ጥበብ)
+
+This document records the ethical commitments, consent status, licensing, and cultural considerations for this project. It is a living document updated as the project progresses.
+
+---
+
+## 1. Fictional Characters
+
+The film features two fictional characters:
+
+| Character | Name | Description | Real person? |
+|-----------|------|-------------|--------------|
+| Mother | Almaz (አልማዝ) | Fictional Ethiopian mother in her early 40s | No |
+| Child | Dawit (ዳዊት) | Fictional Ethiopian boy, around 9 years old | No |
+
+Both characters are entirely invented for this project. No real person's likeness, face, or identity is used or referenced in the creation of these characters.
+
+**Commitment:** If any future version of this project uses a real person's likeness, face, or voice, their informed written consent will be obtained and recorded in this document before any generation takes place.
+
+---
+
+## 2. Consent
+
+### 2.1 Real-Person Consent Policy
+
+This project will not use a real person's image, voice, or personal story without their informed, recorded consent. Consent means the person:
+
+- Understands how their likeness or voice will be used.
+- Agrees to the specific words or actions attributed to them.
+- Knows the content is AI-generated.
+- Can withdraw consent at any time before publication.
+
+### 2.2 Current Consent Status
+
+| Category | Status | Notes |
+|----------|--------|-------|
+| Character likenesses | ✅ Not needed | All characters are fictional |
+| Voice cloning | ✅ Not needed | Using standard Gemini TTS voices, not cloned from a real person |
+| Personal family stories | ✅ Not needed | The story is fictional and not based on a specific real family |
+| Audience test participants | ⏳ Pending | Voluntary verbal consent will be obtained before each test session; participants will be informed their feedback may be quoted anonymously in DESIGN.md |
+
+### 2.3 Audience Testing Consent
+
+Before each audience test:
+
+- Participants will be told the purpose of the test.
+- Participation is voluntary.
+- Feedback may be quoted anonymously in project documentation.
+- No participant names or identifying information will be published without explicit permission.
+- Feedback will be recorded honestly and never invented.
+
+---
+
+## 3. AI Disclosure
+
+### 3.1 End Card
+
+The final film includes a visible end card (approximately 3 seconds) with the following AI-generated content disclosure:
+
+- **English:** "Created with AI tools for story, visuals, narration, and music."
+- **Amharic:** "ይህ አጭር ፊልም በአርቲፊሻል ኢንተለጀንስ (AI) መሳሪያዎች ተዘጋጅቷል።"
+
+This end card appears in both the vertical (9:16) and horizontal (16:9) exports.
+
+### 3.2 Platform Disclosure
+
+When the film is posted publicly, the platform's AI content disclosure label will be switched on (e.g., YouTube's AI-generated content flag, TikTok's AI label, Meta's AI disclosure).
+
+### 3.3 Watermarks and Provenance
+
+Where AI generation tools embed watermarks or provenance metadata (such as SynthID or C2PA), these will be left intact in the final exports. We will not strip or alter provenance metadata.
+
+---
+
+## 4. Copyright and Licensing
+
+### 4.1 Policy
+
+Every model, tool, and asset used in this project must have its license verified and documented before use. Only tools with licenses that permit our intended use (educational, non-commercial project) will be used.
+
+### 4.2 Model and Tool Licenses
+
+| Tool / Model | Purpose | License | Commercial use? | Status |
+|---|---|---|---|---|
+| Gemini 3.8 Flash | Script, prompts, translation | Google AI Terms of Service | Subject to ToS | ⏳ To verify before first API call |
+| Gemini 3.8 Flash TTS | Amharic narration | Google AI Terms of Service | Subject to ToS | ⏳ To verify before first API call |
+| FLUX.1 schnell / FLUX.2 klein 4B | Keyframe image generation | Apache 2.0 (4B variant) | Yes (Apache 2.0) | ⏳ To verify before first API call |
+| Wan 2.2 TI2V-5B | Image-to-video generation | Apache 2.0 | Yes | ⏳ To verify before first use |
+| ACE-Step 1.5 | Original music generation | MIT | Yes | ⏳ To verify before first use |
+| FFmpeg | Video assembly, mixing, export | LGPL / GPL | Yes | ✅ Open source, widely used |
+| jsonschema (Python) | Storyboard validation | MIT | Yes | ✅ Verified |
+| python-dotenv | Environment variable loading | BSD-3-Clause | Yes | ✅ Verified |
+
+### 4.3 Generated Output Ownership
+
+- AI-generated images, video, narration, and music are produced by the tools listed above under their respective output terms.
+- No third-party copyrighted music, stock footage, or stock images are used.
+- All music is originally generated for this project using ACE-Step 1.5.
+- No copyrighted fonts are used without verifying their license.
+
+### 4.4 Fonts
+
+| Font | Purpose | License | Status |
+|------|---------|---------|--------|
+| ⏳ To be selected | Subtitles and end card | ⏳ Pending | Will verify before use |
+
+**Note:** Font licenses will be checked and recorded here before any font is used in the final exports.
+
+---
+
+## 5. Cultural Respect
+
+### 5.1 Representation
+
+This film portrays a fictional Ethiopian mother and child in an Ethiopian highland setting. The story communicates four universal lessons: trusting God, respecting others, never giving up, and remaining hopeful during difficult times.
+
+### 5.2 Commitments
+
+- Represent Ethiopian culture, clothing, food, architecture, and language with respect and care.
+- Use authentic cultural elements (netela, jebena, mesob, injera, krar, washint) appropriately and in context.
+- Avoid stereotypes, exaggeration, or caricature.
+- Do not present fictional scenes as historical facts.
+- Do not fabricate proverbs or attribute invented sayings to Ethiopian culture without clearly marking them as fictional.
+- Narration is in Amharic and will be reviewed for accuracy and natural pronunciation.
+
+### 5.3 Style Choices
+
+- Visual prompts describe qualities (warm, cinematic, respectful) rather than naming living artists.
+- No living artist's distinctive style is deliberately imitated.
+
+---
+
+## 6. Privacy and Security
+
+### 6.1 API Keys and Secrets
+
+- API keys are stored in a local `.env` file, which is listed in `.gitignore`.
+- `.env.example` contains only placeholder values.
+- The `pipeline/config.py` module loads keys from environment variables and never prints or logs their values.
+- Every commit is checked for accidentally included secrets before pushing.
+
+### 6.2 Personal Data
+
+- No personal data (names, addresses, phone numbers, photos) of real people is stored in the repository.
+- Audience test feedback is recorded anonymously unless explicit permission is given.
+- No private family details are sent to AI services that may use inputs for model training.
+
+---
+
+## 7. Transparency — AI Usage by Production Stage
+
+| Stage | AI-assisted? | Tool(s) | Human role |
+|-------|-------------|---------|------------|
+| Story and script | Yes | Gemini Flash | Author reviews, edits, and approves all narrative content |
+| Storyboard and prompts | Yes | Gemini Flash | Author designs shot structure and reviews all prompts |
+| Keyframe images | Yes | FLUX (Cloudflare Workers AI) | Author selects, reviews, and approves each image |
+| Moving shots (video) | Yes | Wan 2.2 (Kaggle) | Author reviews each clip and decides keep/regenerate |
+| Narration | Yes | Gemini TTS | Author reviews pronunciation and pacing |
+| Music | Yes | ACE-Step 1.5 (Kaggle) | Author listens to candidates and selects the best fit |
+| Video assembly | No | FFmpeg | Author controls timing, mixing, subtitles, and export |
+| Subtitles | Partial | Gemini Flash for translation review | Author writes and verifies subtitle text |
+| Validation and testing | No | Python scripts | Automated checks with human review |
+| Documentation | No | Written by author | — |
+
+---
+
+## 8. Audience Testing Ethics
+
+### 8.1 Commitments
+
+- All audience feedback is real and voluntary.
+- We will never invent, fabricate, or exaggerate viewer responses.
+- Participants are informed before the test that their feedback will be used in project documentation.
+- Feedback is recorded as accurately as possible, including critical or negative comments.
+- If a participant asks not to be quoted, their request is honored.
+
+### 8.2 Testing Status
+
+| Test | Participants | Status |
+|------|-------------|--------|
+| Radio cut (narration-only) test | At least 3 viewers | ⏳ Not yet conducted |
+| Near-final cut test | At least 3 viewers | ⏳ Not yet conducted |
+
+Results will be documented honestly in `DESIGN.md` when the tests are conducted.
+
+---
+
+## Document History
+
+| Date | Change |
+|------|--------|
+| 2026-11-25 | Initial ethics document created with fictional characters, consent policy, AI disclosure plan, licensing table, cultural respect commitments, privacy rules, transparency matrix, and audience testing ethics. |
