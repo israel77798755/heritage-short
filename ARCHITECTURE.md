@@ -77,6 +77,10 @@ The FFmpeg workflow has only been tested with mocked tools and temporary fake as
 
 `python -m pipeline.cli render --font <font-path>` runs preflight first, then creates the narration-only radio cut and both video ratios. It refuses to overwrite existing output files. This interface performs no AI calls; the CLI's command flow is tested with mocks, while actual rendering still requires FFmpeg, prepared assets, and a licensed font with verified Amharic glyph shaping. See [README.md](README.md) for Windows commands and path overrides.
 
+## Media placeholder inventory
+
+`MEDIA_PLACEHOLDERS.json` lists expected asset locations and explicitly marks every entry as pending. It is an inventory only: no empty image, video, or audio files are created, and the inventory is not an assembly input. `tests/test_media_placeholders.py` checks that keyframes and optional moving shots map to every storyboard scene and that pending output paths do not contain files. Update the inventory's status and provenance when a real asset is generated and reviewed.
+
 ## Planned production flow
 
 Story and script development take place before the production pipeline. The five planned production stages are:
@@ -129,9 +133,9 @@ The current command is:
 .\.venv\Scripts\python.exe validate_storyboard.py
 ```
 
-`pipeline/orchestrator.py` calls `require_valid_storyboard()` before invoking any configured stage. A validation error stops the run before the first stage; a stage error propagates and prevents later stages from running. Production provider stages have not been registered yet.
+`pipeline/orchestrator.py` calls `require_valid_storyboard()` before invoking any configured stage. A validation error stops the run before the first stage; a stage error propagates and prevents later stages from running. Reference and keyframe stages are registered in `pipeline/visual_workflow.py`; a complete script-to-final-export pipeline is not yet registered.
 
-## Caching helper (implemented; production integration pending)
+## Caching (implemented for reference and keyframe stages)
 
 Cache each generated item independently so an unchanged shot can be reused. A cache key should be a stable hash of all inputs that can affect that item, including:
 
@@ -141,25 +145,25 @@ Cache each generated item independently so an unchanged shot can be reused. A ca
 - Provider, model/version, parameters, and seed.
 - Dependency hashes from earlier stages.
 
-`pipeline/cache.py` implements stable input hashing, includes the contents of named reference files, and derives cache output paths. `pipeline/cached_generation.py` computes keys from shot ID, provider/model, prompt, parameters, seed, file type, and reference-image contents. It skips provider calls and run-log entries for a valid cache hit; a miss runs through the retrying, logging provider runner and writes to the deterministic cache path. Tests cover cache hits, invalidation by reference/shot/parameter changes, and corrupt empty entries. Concrete production stages do not use this wrapper yet.
+`pipeline/cache.py` implements stable input hashing, includes the contents of named reference files, and derives cache output paths. `pipeline/cached_generation.py` computes keys from shot ID, provider/model, prompt, parameters, seed, file type, and reference-image contents. The reference and keyframe stages use this wrapper: a valid cache hit skips both the provider call and its run-log record; a miss runs through the retrying, logging provider runner and writes to a temporary file before promoting it to the cache path. Tests cover cache hits, invalidation by reference/shot/parameter changes, corrupt empty entries, and cleanup after a failed partial output.
 
-## Retries and failures (helper implemented; provider integration pending)
+## Retries and failures (implemented)
 
-`pipeline/retry.py` implements bounded retries for caller-declared transient exception types. `pipeline/provider_runner.py` retries rate-limit and timeout errors by default and logs every attempt. Validation errors, missing credentials, permission errors, and other undeclared failures are not retried by default. If moving-shot generation is unavailable, the documented fallback is a slow FFmpeg pan/zoom over an approved still; record that fallback honestly. No real provider call has exercised these helpers.
+`pipeline/retry.py` implements bounded retries for caller-declared transient exception types. `pipeline/provider_runner.py` retries rate-limit and timeout errors by default and logs every attempt. The Gemini image adapter maps rate limits and timeouts to those retryable errors. Validation errors, missing credentials, permission errors, and other undeclared failures are not retried by default. If moving-shot generation is unavailable, the documented fallback is a slow FFmpeg pan/zoom over an approved still; record that fallback honestly. The retry path is covered by tests, but no real provider call has exercised it.
 
-No provider calls or generation failures have been recorded by the current pipeline because those stages do not exist yet.
+No real provider calls or provider failures have been recorded because no provider-backed generation has been run.
 
-## Run logging and cost evidence (logger implemented; provider integration pending)
+## Run logging and cost evidence (integrated; no calls recorded)
 
 `pipeline/runlog.py` provides `append_model_call()` to append one JSON object per actual model/API call, including:
 
 - Timestamp, run identifier, stage, shot, and attempt.
 - Provider and model/version.
 - Non-secret parameters and seed (or `null` if the provider does not expose a seed).
-- Input/cache fingerprint, status, and latency.
+- Prompt SHA-256 digest (not the raw prompt), status, and latency.
 - Billed cost and/or list-price-equivalent cost, with the pricing basis or `null` when it cannot be verified.
 
-The helper redacts sensitive parameter fields and common credential patterns. Callers must still avoid placing raw prompts or secret-bearing data in parameters; use a prompt hash instead. Never log API keys, authorization headers, private personal data, or full secret-bearing environment values. Cache hits are not model calls and must not be logged as if a provider ran. No provider has called the logger, and `runs.jsonl` does not exist because no model calls have been made.
+The helper redacts sensitive parameter fields and common credential patterns. Reference and keyframe provider calls go through the logged runner if explicitly invoked; cache hits do not create call records. The Gemini adapter is not invoked by the offline validation/test workflow, and no provider calls have been made, so `runs.jsonl` is not present.
 
 `pipeline/subtitles.py` can write an English SRT using cumulative storyboard shot durations after validation. These are draft timings only; final subtitles must be checked against generated narration.
 
@@ -176,4 +180,4 @@ The current lightweight checks are:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The current tests use temporary files and fake stages/providers/tools to cover validation-before-generation, deterministic cache keys and invalidation, per-attempt provider logging, bounded retries, secret-safe run logs, subtitle validation, assembly command construction, overwrite protection, and final-output checks. Actual FFmpeg execution, media inspection, hosted provider tests, and Amharic quality checks remain pending and require the tools, assets, terms, and human review to be available.
+The current tests use temporary files and fake stages/providers/tools to cover validation-before-generation, deterministic cache keys and invalidation, per-attempt provider logging, bounded retries, secret-safe run logs, subtitle validation, assembly command construction, overwrite protection, final-output checks, and media-placeholder inventory integrity. Actual FFmpeg execution, media inspection, hosted provider tests, and Amharic quality checks remain pending and require the tools, assets, terms, and human review to be available.

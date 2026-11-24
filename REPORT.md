@@ -28,12 +28,15 @@ subtitles, a warm cinematic style, and 9:16 and 16:9 exports.
 - Offline assembly preflight and FFmpeg command builders cover narration-only
   radio, music ducking, loudness normalization, subtitles, a still-image
   pan/zoom fallback, the disclosure card, and both aspect ratios.
+- A machine-readable inventory identifies the reference images, scene media,
+  narration, music, subtitle/font inputs, and final exports that remain
+  pending. It creates no fake media files.
 - Project documentation records architecture, design, ethics, costs,
   experiments, and failures without claiming unobserved results.
 
 ## Verification
 
-The latest full local test run completed with **96 tests passing**. The
+The latest full local test run completed with **97 tests passing**. The
 storyboard validator reports ten scenes, 75 seconds of story, and a three-second
 end card (78 seconds total). These tests use mocked providers and media tools;
 they do not establish that a real API call or video render works.

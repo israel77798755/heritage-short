@@ -1,0 +1,246 @@
+{
+  "manifest_version": 1,
+  "project": "The Wisdom of Our Mothers (የእናቶቻችን ጥበብ)",
+  "status": "PLACEHOLDERS_ONLY",
+  "generated_media": false,
+  "provider_requests_made": false,
+  "notice": "This is an inventory, not media. No empty, mock, or placeholder image, video, or audio files are valid pipeline inputs.",
+  "assets": [
+    {
+      "asset_id": "reference-almaz",
+      "stage": "character_references",
+      "expected_path": "outputs/assets/references/almaz.png",
+      "status": "pending_generation",
+      "is_placeholder": true,
+      "requirements": "Fictional Almaz portrait; create only after provider terms and cost are approved."
+    },
+    {
+      "asset_id": "reference-dawit",
+      "stage": "character_references",
+      "expected_path": "outputs/assets/references/dawit.png",
+      "status": "pending_generation",
+      "is_placeholder": true,
+      "requirements": "Fictional Dawit portrait; create only after provider terms and cost are approved."
+    },
+    {
+      "asset_id": "reference-visual-style",
+      "stage": "character_references",
+      "expected_path": "outputs/assets/references/visual-style.png",
+      "status": "pending_generation",
+      "is_placeholder": true,
+      "requirements": "Text-free style reference; manually review before keyframe generation."
+    },
+    {
+      "asset_id": "keyframe-shot-01",
+      "stage": "keyframes",
+      "scene_number": 1,
+      "expected_path": "outputs/assets/keyframes/shot-01.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-02",
+      "stage": "keyframes",
+      "scene_number": 2,
+      "expected_path": "outputs/assets/keyframes/shot-02.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-03",
+      "stage": "keyframes",
+      "scene_number": 3,
+      "expected_path": "outputs/assets/keyframes/shot-03.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-04",
+      "stage": "keyframes",
+      "scene_number": 4,
+      "expected_path": "outputs/assets/keyframes/shot-04.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-05",
+      "stage": "keyframes",
+      "scene_number": 5,
+      "expected_path": "outputs/assets/keyframes/shot-05.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-06",
+      "stage": "keyframes",
+      "scene_number": 6,
+      "expected_path": "outputs/assets/keyframes/shot-06.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-07",
+      "stage": "keyframes",
+      "scene_number": 7,
+      "expected_path": "outputs/assets/keyframes/shot-07.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-08",
+      "stage": "keyframes",
+      "scene_number": 8,
+      "expected_path": "outputs/assets/keyframes/shot-08.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-09",
+      "stage": "keyframes",
+      "scene_number": 9,
+      "expected_path": "outputs/assets/keyframes/shot-09.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "keyframe-shot-10",
+      "stage": "keyframes",
+      "scene_number": 10,
+      "expected_path": "outputs/assets/keyframes/shot-10.png",
+      "status": "pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-01",
+      "stage": "moving_shots",
+      "scene_number": 1,
+      "expected_path": "outputs/assets/moving_shots/shot-01.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true,
+      "requirements": "Optional: an approved still keyframe has an FFmpeg pan/zoom fallback."
+    },
+    {
+      "asset_id": "moving-shot-02",
+      "stage": "moving_shots",
+      "scene_number": 2,
+      "expected_path": "outputs/assets/moving_shots/shot-02.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-03",
+      "stage": "moving_shots",
+      "scene_number": 3,
+      "expected_path": "outputs/assets/moving_shots/shot-03.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-04",
+      "stage": "moving_shots",
+      "scene_number": 4,
+      "expected_path": "outputs/assets/moving_shots/shot-04.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-05",
+      "stage": "moving_shots",
+      "scene_number": 5,
+      "expected_path": "outputs/assets/moving_shots/shot-05.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-06",
+      "stage": "moving_shots",
+      "scene_number": 6,
+      "expected_path": "outputs/assets/moving_shots/shot-06.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-07",
+      "stage": "moving_shots",
+      "scene_number": 7,
+      "expected_path": "outputs/assets/moving_shots/shot-07.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-08",
+      "stage": "moving_shots",
+      "scene_number": 8,
+      "expected_path": "outputs/assets/moving_shots/shot-08.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-09",
+      "stage": "moving_shots",
+      "scene_number": 9,
+      "expected_path": "outputs/assets/moving_shots/shot-09.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "moving-shot-10",
+      "stage": "moving_shots",
+      "scene_number": 10,
+      "expected_path": "outputs/assets/moving_shots/shot-10.mp4",
+      "status": "optional_pending_generation",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "narration-amharic",
+      "stage": "narration",
+      "expected_path": "outputs/audio/narration.wav",
+      "status": "pending_generation_and_language_review",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "music-score",
+      "stage": "music",
+      "expected_path": "outputs/audio/music.wav",
+      "status": "pending_generation_and_license_review",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "english-subtitles",
+      "stage": "subtitles",
+      "expected_path": "outputs/subtitles/en.srt",
+      "status": "pending_export_and_timing_review",
+      "is_placeholder": true,
+      "requirements": "Storyboard subtitle text exists; the final SRT has not been generated or reviewed against narration."
+    },
+    {
+      "asset_id": "subtitle-end-card-font",
+      "stage": "assembly",
+      "expected_path": null,
+      "status": "pending_selection_and_license_verification",
+      "is_placeholder": true,
+      "requirements": "Supply a licensed TTF/OTF/TTC font with Amharic glyph coverage using the CLI --font option."
+    },
+    {
+      "asset_id": "radio-cut",
+      "stage": "assembly",
+      "expected_path": "outputs/production/final/radio/wisdom-of-our-mothers-radio.wav",
+      "status": "pending_assembly",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "final-vertical",
+      "stage": "assembly",
+      "expected_path": "outputs/production/final/9x16/wisdom-of-our-mothers-1080x1920.mp4",
+      "status": "pending_assembly_and_inspection",
+      "is_placeholder": true
+    },
+    {
+      "asset_id": "final-horizontal",
+      "stage": "assembly",
+      "expected_path": "outputs/production/final/16x9/wisdom-of-our-mothers-1920x1080.mp4",
+      "status": "pending_assembly_and_inspection",
+      "is_placeholder": true
+    }
+  ]
+}

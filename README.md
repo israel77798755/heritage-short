@@ -44,6 +44,7 @@ heritage-short/
 ├── ETHICS.md
 ├── EXPERIMENTS.md
 ├── FAILURES.md
+├── MEDIA_PLACEHOLDERS.json
 ├── README.md
 ├── REPORT.md
 ├── requirements.txt
@@ -76,9 +77,11 @@ heritage-short/
     ├── test_cli.py
     ├── test_gemini_image.py
     ├── test_keyframes.py
+    ├── test_media_placeholders.py
     ├── test_media_preflight.py
     ├── test_orchestrator.py
     ├── test_provider_runner.py
+    ├── test_providers.py
     ├── test_references.py
     ├── test_retry.py
     ├── test_runlog.py
@@ -97,11 +100,9 @@ Run these commands from PowerShell. The installation command uses the dependenci
 Set-Location -LiteralPath 'C:\Users\HP\Downloads\heritage-short'
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
-notepad .env
 ```
 
-The copy command leaves an existing `.env` untouched. Do not commit `.env`; `.gitignore` excludes it. `.env.example` contains placeholder values only.
+No API key or `.env` file is needed to validate the storyboard or run the offline tests. Do not create or enter provider credentials for this offline workflow. If a provider is separately approved later, `.env.example` contains placeholders and the optional `.env` file is excluded by `.gitignore`.
 
 ## Environment variables
 
@@ -119,7 +120,11 @@ Only configure credentials for services actually selected. Never put keys in sou
 
 ### Gemini image adapter status
 
-`pipeline.gemini_image.GeminiImageProvider` uses Python's standard-library HTTP client and does not create a client or make a request during construction. The API key is read only when `generate_image()` is explicitly called. That call uploads its prompt and any reference images and may incur charges; do not invoke it until model access, pricing, quotas, and Google's data terms are checked and accepted. The API's seed is not exposed, so the call log records a null seed. Google's current image documentation states generated images carry SynthID; preserve that provenance. There is not yet a generation CLI command, and no real call has been made.
+`pipeline.gemini_image.GeminiImageProvider` uses Python's standard-library HTTP client and does not create a client or make a request during construction. It is not used by validation or the assembly CLI; tests invoke it only with mocked HTTP, so no API key or network request is needed. A direct `generate_image()` call would upload its prompt and any reference images and may incur charges, so keep it unused until model access, pricing, quotas, and Google's data terms are checked and accepted. The API's seed is not exposed, so a call made through the logged runner records a null seed. Google's current image documentation states generated images carry SynthID; preserve that provenance. No provider-generation CLI command exists.
+
+### Media placeholders
+
+[`MEDIA_PLACEHOLDERS.json`](MEDIA_PLACEHOLDERS.json) is a tracking inventory only, not a set of media files. Every listed asset is marked pending; no fake or empty `.png`, `.mp4`, or audio files are supplied. The assembly CLI requires actual files and does not accept this JSON inventory as media. Update the inventory when a real, reviewed asset is produced; do not mark an asset complete before checking the file and its provenance.
 
 ## Validate the storyboard and run tests
 
@@ -178,6 +183,7 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Reference/keyframe stages are registered in the visual workflow; moving shots, music, and narration remain unregistered.
 - Provider-neutral text, image, video, music, and narration capability contracts; Gemini image is the only concrete adapter, while text/video/music/narration adapters remain unimplemented.
 - Provider-call runner with bounded retries, output-file checks, prompt-hash logging, and per-attempt run records; no real provider calls have occurred.
+- A machine-readable placeholder inventory for references, per-shot keyframes and optional moving shots, audio, subtitles, font, and final exports; no fake media files are supplied.
 - Draft English SRT generation from storyboard shot durations (not final narration sync).
 - Assembly preflight checks FFmpeg/ffprobe paths, media streams, SRT timing, font-file presence, and writable output directories.
 - FFmpeg command builders for still-image pan/zoom, normalized shot clips, a narration-only radio cut, and selectable-subtitle 1080p vertical/horizontal exports.
