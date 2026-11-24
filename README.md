@@ -49,6 +49,7 @@ heritage-short/
 ├── pipeline/
 │   ├── __init__.py
 │   ├── assembly.py
+│   ├── cached_generation.py
 │   ├── cache.py
 │   ├── cli.py
 │   ├── config.py
@@ -63,6 +64,7 @@ heritage-short/
 │   └── storyboard.schema.json
 └── tests/
     ├── test_assembly.py
+    ├── test_cached_generation.py
     ├── test_cache.py
     ├── test_cli.py
     ├── test_media_preflight.py
@@ -150,7 +152,8 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - A JSON Schema and Python validator with semantic checks.
 - Unit tests for storyboard validation and the helper modules listed below.
 - Shared project paths and environment-variable helpers.
-- Content-based cache key and output-path helpers (not yet used by generation stages).
+- Content-based cache-key and output-path helpers used by the new cache-aware call wrapper (production-stage integration remains pending).
+- Cache-aware provider-call wrapper: cache hits skip API calls and miss calls use the logged retry runner; production stages do not use it yet.
 - Bounded retry helper for caller-classified transient errors (not yet connected to providers).
 - JSONL model-call logger with sensitive-value redaction (no provider calls or `runs.jsonl` yet).
 - Validation-gated stage orchestrator (no production stages are registered yet).
@@ -168,7 +171,7 @@ The planned film includes a visible AI disclosure end card, and the platform's A
 - Have an Amharic speaker review narration, subtitles, and pronunciation guidance.
 - Implement concrete provider adapters and script/story and production-stage workflows.
 - Generate and review reference images, keyframes, moving shots, music, and narration using hosted services; no media has been generated yet.
-- Connect the cache helper and concrete provider adapters to production stages; real provider calls remain pending.
+- Connect the cache-aware wrapper and concrete provider adapters to production stages; real provider calls remain pending.
 - Once FFmpeg/ffprobe and approved assets are available, run preflight and render/inspect the radio cut and both aspect ratios; command-level tests are not a substitute for media inspection.
 - Provide and verify the license and Amharic glyph/shaping of the end-card font before rendering.
 - Conduct both audience tests with at least three people each; neither test has happened yet.

@@ -19,6 +19,9 @@ pipeline/config.py
 pipeline/cache.py
   content fingerprints and deterministic cache paths
 
+pipeline/cached_generation.py
+  cache lookup before provider calls; cache misses use retries and run logging
+
 pipeline/retry.py
   bounded retries for explicitly classified transient errors
 
@@ -119,7 +122,7 @@ Cache each generated item independently so an unchanged shot can be reused. A ca
 - Provider, model/version, parameters, and seed.
 - Dependency hashes from earlier stages.
 
-`pipeline/cache.py` implements stable input hashing, includes the contents of named reference files, and derives cache output paths. Its unit tests cover deterministic keys, invalidation when a prompt or reference changes, and empty-file handling. Production stages do not consume the cache helper yet.
+`pipeline/cache.py` implements stable input hashing, includes the contents of named reference files, and derives cache output paths. `pipeline/cached_generation.py` computes keys from shot ID, provider/model, prompt, parameters, seed, file type, and reference-image contents. It skips provider calls and run-log entries for a valid cache hit; a miss runs through the retrying, logging provider runner and writes to the deterministic cache path. Tests cover cache hits, invalidation by reference/shot/parameter changes, and corrupt empty entries. Concrete production stages do not use this wrapper yet.
 
 ## Retries and failures (helper implemented; provider integration pending)
 
