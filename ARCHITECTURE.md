@@ -30,11 +30,14 @@ pipeline/orchestrator.py
 
 pipeline/subtitles.py
   draft SRT timing derived from storyboard shot durations
+
+pipeline/providers.py
+  capability-specific, provider-neutral generation contracts
 ```
 
 `storyboard.json` is the proposed contract shared by all production stages. `validate_storyboard.py` checks the JSON Schema and additional film rules before generation. `pipeline/config.py` centralizes paths and loads local environment variables with `python-dotenv`. Focused tests cover the cache, retry, logging, orchestration, and draft subtitle utilities.
 
-These utilities are foundations, not provider integrations. There are no AI asset-generation adapters, generated assets, `runs.jsonl`, or final exports in the repository yet.
+The protocols in `pipeline/providers.py` define separate text, image, video, music, and narration capabilities so an adapter can declare only what its service supports. No concrete AI provider adapter exists yet. The cache, retry, logging, orchestration, subtitle, and provider-contract utilities are foundations; there are no generated assets, `runs.jsonl`, or final exports in the repository yet.
 
 ## Planned production flow
 
