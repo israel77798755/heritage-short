@@ -87,7 +87,9 @@ Every model, tool, and asset used in this project must have its license verified
 | Gemini 3.8 Flash | Script, prompts, translation | Google AI Terms of Service | Subject to ToS | ⏳ To verify before first API call |
 | Gemini 3.8 Flash TTS | Possible narration candidate | Google AI Terms of Service | Subject to ToS | ⏳ Amharic support, service terms, and quota still need verification |
 | Gemini Nano Banana 2.1 | Candidate reference and keyframe image generation; adapter implemented | Google AI Terms of Service | Subject to ToS | ⏳ Verify account access, pricing, data terms, and quotas before any request |
-| FLUX.1 schnell / FLUX.2 klein 4B | Keyframe image generation | Apache 2.0 (4B variant) | Yes (Apache 2.0) | ⏳ To verify before first API call |
+| Keyframe images (cloud path) | AI Horde (`aihorde.net`, anonymous key `0000000000`) | Server software: AGPL-3.0-or-later; AI Horde claims no output ownership; generated-image terms follow the selected worker model (typically CreativeML OpenRAIL-M / OpenRAIL++) | Yes (subject to OpenRAIL responsible-use terms) | ⏳ Pending verification of exact worker model(s) logged in `runs.jsonl` |
+| Amharic narration (cloud path) | `edge-tts` (`am-ET-MekdesNeural`) | Client library: LGPL-3.0; Microsoft Edge Read Aloud neural voice service | Educational / non-commercial use | ⏳ Pending real run & pronunciation review |
+| Original music (cloud path) | FluidSynth + `FluidR3_GM` SoundFont | FluidSynth: LGPL-2.1; `FluidR3_GM`: MIT | Yes | ✅ Open source; MIDI score authored in repository |
 | Wan 2.2 TI2V-5B | Image-to-video generation | Apache 2.0 | Yes | ⏳ To verify before first use |
 | ACE-Step 1.5 | Original music generation | MIT | Yes | ⏳ To verify before first use |
 | FFmpeg | Video assembly, mixing, export | LGPL / GPL | Yes | ✅ Open source, widely used |
