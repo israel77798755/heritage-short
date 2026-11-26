@@ -1,0 +1,80 @@
+name: Produce Heritage Short (Cloud)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/produce_cloud.py"
+      - ".github/workflows/produce_film.yml"
+      - "storyboard.json"
+      - "pipeline/**"
+
+permissions:
+  contents: read
+
+jobs:
+  produce-film:
+    name: Generate assets and render 9x16 & 16x9 MP4s
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install FFmpeg, FluidSynth, and Ethiopic+Latin fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fluidsynth fluid-soundfont-gm fonts-sil-abyssinica fontconfig
+          ls -la /usr/share/fonts/truetype/abyssinica/ || true
+          ls -la /usr/share/sounds/sf2/
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install edge-tts pillow
+
+      - name: Validate storyboard and run tests
+        run: |
+          python validate_storyboard.py
+          python -m unittest discover -s tests -v
+
+      - name: Generate cloud assets (images, Amharic TTS, original score, subtitles)
+        run: python -m scripts.produce_cloud
+
+      - name: Run assembly preflight
+        run: |
+          FONT_FILE=$(find /usr/share/fonts -name "AbyssinicaSIL-Regular.ttf" | head -n 1)
+          echo "Using font: $FONT_FILE"
+          python -m pipeline.cli preflight --font "$FONT_FILE"
+
+      - name: Render radio cut and both MP4 exports (9:16 and 16:9)
+        run: |
+          FONT_FILE=$(find /usr/share/fonts -name "AbyssinicaSIL-Regular.ttf" | head -n 1)
+          python -m pipeline.cli render --font "$FONT_FILE"
+
+      - name: Verify rendered MP4 exports with ffprobe
+        run: |
+          ls -lh outputs/production/
+          ffprobe -v error -show_format -show_streams outputs/production/film-9x16.mp4 || ffprobe -v error -show_format -show_streams $(find outputs/production -name "*.mp4" | sort)
+
+      - name: Upload produced film exports and logs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: heritage-short-film-exports
+          path: |
+            outputs/production/*.mp4
+            outputs/production/*.wav
+            outputs/subtitles/en.srt
+            outputs/assets/references/*.png
+            outputs/assets/keyframes/*.png
+            runs.jsonl
+          retention-days: 30
